@@ -1,0 +1,123 @@
+{
+  "run_id": "2026-10-19-local-checkpoint",
+  "recorded_at_utc": "2026-10-19T02:07:54.4596170+00:00",
+  "checkpoint": "Local foundation and feasibility spikes only; not M0 or M1 complete",
+  "verification": {
+    "exit_code": 0,
+    "command": "./scripts/verify.ps1",
+    "result": "PASS_LOCAL_CHECKPOINT_ONLY"
+  },
+  "tests": {
+    "http_integration": {
+      "failed": 0,
+      "test_identity_is_not_entra": true,
+      "passed": 18
+    },
+    "frontend_unit": {
+      "failed": 0,
+      "passed": 3
+    },
+    "total_passed": 69,
+    "chromium": {
+      "skipped": 0,
+      "viewport": [
+        "1440x1000",
+        "390x844"
+      ],
+      "software_webgl": true,
+      "failed": 0,
+      "fps_measured": false,
+      "passed": 7
+    },
+    "unit": {
+      "failed": 0,
+      "passed": 41
+    }
+  },
+  "versions": {
+    "inter": "4.1",
+    "drei": "10.7.9",
+    "npm": "11.13.0",
+    "fiber": "9.8.2",
+    "dotnet_sdk": "10.0.300",
+    "typescript": "5.9.3",
+    "chromium": "156.0.8078.4",
+    "vite": "8.3.4",
+    "node": "24.16.0",
+    "mip_file": "1.18.124",
+    "react": "19.3.1",
+    "playwright": "1.64.1",
+    "aspnet_runtime": "10.0.8",
+    "three": "0.186.1"
+  },
+  "native_load": {
+    "g1_passed": false,
+    "actual_rights_constants": [
+      "VIEW",
+      "DOCEDIT",
+      "EDIT"
+    ],
+    "tenant_authentication": "NOT_RUN",
+    "result": "PASS"
+  },
+  "publish": {
+    "azure_deployed": false,
+    "single_dotnet_web_artifact": true,
+    "artifacts": [
+      {
+        "path": ".runtime/publish/Gateway.Web.dll",
+        "bytes": 55296,
+        "sha256": "AC07A774829A1FE69DC1CF2162649A19BC900A19D8C45F4AF1710CF15E6677E1"
+      },
+      {
+        "path": ".runtime/publish/wwwroot/app/index.html",
+        "bytes": 414,
+        "sha256": "1BA049288D06CB4C428B65314689A1BADFC7B4F2E9F3658FB91A1D9C5D4F98AC"
+      },
+      {
+        "path": ".runtime/publish/wwwroot/app/assets/index-DtkkjNoG.js",
+        "bytes": 305664,
+        "sha256": "A7CE06AD197C6C3EAB87D3AFA340D7E3C2AE76F0930DB1505FD0556DB444676A"
+      },
+      {
+        "path": ".runtime/publish/wwwroot/app/assets/VaultScene-CLbOOwTm.js",
+        "bytes": 930973,
+        "sha256": "E317F17C0B5F29A05B98C6B0954FF7B9AE5F9C9F9231773C8AA9FB654ED20ED0"
+      }
+    ],
+    "development_spike_emitted": false,
+    "node_production_server": false,
+    "result": "PASS_LOCAL_PACKAGE"
+  },
+  "gates": {
+    "G6": "BLOCKED_SCANNER_PROOF",
+    "G1": "BLOCKED_LIVE_CONFIG_NATIVE_LOAD_ONLY_PASSED",
+    "G2": "NOT_RUN",
+    "G0": "BLOCKED_LIVE_CONFIG",
+    "G7": "NOT_PASSED_PARTIAL_LOCAL_CHECKS_ONLY",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "G5": "NOT_RUN"
+  },
+  "security_evidence": {
+    "actual_recipient_rights_readback": "NOT_RUN",
+    "office_cross_copy_denial": "NOT_RUN",
+    "simulation_downloads": "DENIED_IN_HTTP_TESTS",
+    "production_readiness": false,
+    "trusted_scan": "NOT_RUN",
+    "sql_durability": "NOT_IMPLEMENTED"
+  },
+  "warnings": [
+    "Lazy scene chunk exceeds Vite uncompressed 500kB advisory; gzip 247.37kB",
+    "R3F/Three Clock deprecation warning",
+    "No representative office GPU/FPS/network/accessibility or live OIDC/Azure proof",
+    "Injected import/renderer/context failure console errors expected"
+  ],
+  "external_changes": {
+    "azure_provision_or_deploy": false,
+    "tenant_mutations": false,
+    "billing_activation": false,
+    "admin_consent": false,
+    "antivirus_exclusions": false
+  }
+}

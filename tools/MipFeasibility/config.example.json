@@ -1,0 +1,17 @@
+{
+  "TenantId": "<tenant-guid>",
+  "ClientId": "<processor-app-guid>",
+  "TenantDomain": "<verified-tenant-domain>",
+  "CertificateThumbprint": "<CurrentUser-My-certificate-thumbprint>",
+  "InputPath": "<absolute-private-synthetic-xlsx-path>",
+  "PrivateRunRoot": "<absolute-precreated-private-directory>",
+  "LabelOnlyId": "<label-only-guid>",
+  "ConfidentialId": "<admin-protected-label-guid>",
+  "UdpId": "<user-defined-permissions-label-guid>",
+  "RecipientA": "<validated-recipient-a-address>",
+  "RecipientB": "<validated-recipient-b-address>",
+  "ExpectedProtectionOwner": "<expected-service-principal-protection-owner>",
+  "AllowedResources": [],
+  "ConsentedHosts": [],
+  "OperatorAcknowledgedSdkNetworkAndDiagnostics": false
+}

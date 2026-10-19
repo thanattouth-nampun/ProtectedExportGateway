@@ -1,0 +1,74 @@
+{
+  "run_id": "2026-10-19-list-workspace",
+  "recorded_at_utc": "2026-10-19T02:46:23.3194196+00:00",
+  "decision": "ADR-012: remove 3D; retain React/.NET and all security/native/intake/Azure requirements",
+  "verification": {
+    "command": "./scripts/verify.ps1",
+    "exit_code": 0,
+    "result": "PASS_LOCAL_REGRESSION"
+  },
+  "tests": {
+    "frontend_unit_passed": 3,
+    "unit_passed": 41,
+    "no_webgl_request_test": "PASS",
+    "total_passed": 67,
+    "browser_passed": 5,
+    "browser_failed": 0,
+    "http_passed": 18,
+    "software_gpu_flags": false
+  },
+  "renderer": {
+    "code_removed": true,
+    "old_scene_chunk_emitted": false,
+    "toggle_removed": true,
+    "packages_removed": [
+      "three",
+      "@types/three",
+      "@react-three/fiber",
+      "@react-three/drei"
+    ],
+    "direct_and_transitive_removed": 60
+  },
+  "build": {
+    "main_js_bytes": 303526,
+    "sizes_are_not_load_benchmarks": true,
+    "scene_js_bytes": 0,
+    "vite_main_js_gzip_kb": 95.35,
+    "vite_main_js_kb": 303.52
+  },
+  "publish": {
+    "one_dotnet_web_artifact": true,
+    "development_harness_emitted": false,
+    "stale_renderer_guard": "PASS",
+    "artifacts": [
+      {
+        "path": ".runtime/publish/Gateway.Web.dll",
+        "bytes": 55296,
+        "sha256": "AC07A774829A1FE69DC1CF2162649A19BC900A19D8C45F4AF1710CF15E6677E1"
+      },
+      {
+        "path": ".runtime/publish/wwwroot/app/index.html",
+        "bytes": 414,
+        "sha256": "676142E8E74B9F923ADA43CDAA25B803309B71F9833DF7643C190E0D727C7A9E"
+      },
+      {
+        "path": ".runtime/publish/wwwroot/app/assets/index-eHw3JTNr.js",
+        "bytes": 303526,
+        "sha256": "6D0B7E60373D272928DC9F8DE4E242CAD26D1A4F9A87E604E09CF5D0C23373F8"
+      }
+    ],
+    "private_output": ".runtime/publish"
+  },
+  "gates": {
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "G6": "BLOCKED_SCANNER_PROOF",
+    "renderer_subchecks": "RETIRED_BY_USER_SCOPE_DECISION",
+    "G5": "NOT_RUN",
+    "G2": "NOT_RUN",
+    "G1": "BLOCKED_LIVE_CONFIG_NATIVE_LOAD_ONLY_PASSED",
+    "G0": "BLOCKED_LIVE_CONFIG",
+    "G7": "PARTIAL_LOCAL_LIST_SESSION_CHECKS_FULL_GATE_NOT_PASSED"
+  },
+  "tenant_or_azure_changes": false
+}

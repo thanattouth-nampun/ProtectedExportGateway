@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Gateway.Application/Gateway.Application.csproj" />
+    <Project Path="src/Gateway.Domain/Gateway.Domain.csproj" />
+    <Project Path="src/Gateway.Infrastructure/Gateway.Infrastructure.csproj" />
+    <Project Path="src/Gateway.Web/Gateway.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Gateway.IntegrationTests/Gateway.IntegrationTests.csproj" />
+    <Project Path="tests/Gateway.SqlTests/Gateway.SqlTests.csproj" />
+    <Project Path="tests/Gateway.UnitTests/Gateway.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/MipFeasibility/MipFeasibility.csproj" />
+    <Project Path="tools/SeedDocuments/SeedDocuments.csproj" />
+  </Folder>
+</Solution>

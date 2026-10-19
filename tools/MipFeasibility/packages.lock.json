@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "Microsoft.Identity.Client": {
+        "type": "Direct",
+        "requested": "[4.83.3, )",
+        "resolved": "4.83.3",
+        "contentHash": "XNJJn5uctuGvl3u6qzAof2TNysAZ/PPVKzkAglxvTO5XHgff/Ibs1+yi2G26Xrf6X/f780kS4fMKKdHcGb96hQ==",
+        "dependencies": {
+          "Microsoft.IdentityModel.Abstractions": "8.14.0"
+        }
+      },
+      "Microsoft.InformationProtection.File": {
+        "type": "Direct",
+        "requested": "[1.18.124, )",
+        "resolved": "1.18.124",
+        "contentHash": "0VEVZ/mE+U28QcB/aOsFcgK1/uh94Cj79Mk6qUd5QOoNds/uFuE2DfioRIr3uQJu9ky+Qjf5pE+RLq6wDwUtWg=="
+      },
+      "Microsoft.IdentityModel.Abstractions": {
+        "type": "Transitive",
+        "resolved": "8.14.0",
+        "contentHash": "iwbCpSjD3ehfTwBhtSNEtKPK0ICun6ov7Ibx6ISNA9bfwIyzI2Siwyi9eJFCJBwxowK9xcA1mj+jBWiigeqgcQ=="
+      }
+    }
+  }
+}

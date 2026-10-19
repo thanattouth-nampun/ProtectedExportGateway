@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Folio — local UX prototype for a protected document workspace. Simulated data only.">
+  <title>Folio · Document workspace — UX prototype v4</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหา</a>
+<div class="prototype-strip"><span><strong>UX PROTOTYPE</strong> ข้อมูลและสถานะจำลอง · ไม่เชื่อม Entra, MIP หรือ Azure</span><label>บทบาทจำลอง <select id="persona" aria-label="เลือกบทบาทจำลอง"><option value="A">วิว · ผู้ใช้ A</option><option value="B">นิ้ง · ผู้ใช้ B</option><option value="O1">อร · Owner O1</option><option value="O2">เมย์ · Owner O2</option><option value="AUD">ผู้ตรวจสอบ · Auditor</option></select></label></div>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="#library" class="brand" aria-label="Folio กลับหน้าหลัก"><span class="brand-icon" aria-hidden="true"><b></b><b></b></span>folio<span class="brand-dot">.</span></a>
+    <span class="workspace-label">DOCUMENT WORKSPACE</span>
+    <nav aria-label="เมนูหลัก" id="nav"></nav>
+    <div class="sidebar-note"><span class="little-lock" aria-hidden="true">▣</span><strong>เอกสารขององค์กร<br>สำเนาสำหรับคุณ</strong><p>สิทธิ์ของแต่ละสำเนา<br>ออกตามผู้ขอดาวน์โหลด</p></div>
+    <div class="sidebar-bottom"><span class="dot"></span> พื้นที่ตัวอย่าง UX <button id="sign-in-link" class="link-button">ดูหน้าเข้าสู่ระบบ</button></div>
+  </aside>
+  <div class="app-body">
+    <header class="topbar"><div class="breadcrumb"><button id="menu-toggle" class="icon-button" aria-label="เปิดเมนู" aria-expanded="false">☰</button><span>Workspace</span><span aria-hidden="true">/</span><strong id="breadcrumb-page">คลังเอกสาร</strong></div><div class="account"><span class="account-detail"><strong id="account-name"></strong><small id="account-role"></small></span><span class="avatar" id="account-avatar"></span></div></header>
+    <main id="main" tabindex="-1"></main>
+    <footer class="footnote">Folio · แนวทาง UX/UI v4 <span>ไฟล์ตัวอย่างและหลักฐานจำลองทั้งหมด · ยังไม่ใช่ระบบใช้งานจริง</span></footer>
+  </div>
+</div>
+<dialog id="detail-dialog" class="detail-dialog" aria-labelledby="detail-title"><div id="detail-content"></div></dialog>
+<dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title"><div id="confirm-content"></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<template id="scene-template">
+<svg class="iso-scene" viewBox="0 0 520 250" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="scene-ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e2eee8"/><stop offset="1" stop-color="#f0f6f3"/></linearGradient><linearGradient id="scene-roof" x1="0" x2="1"><stop stop-color="#c9dcfa"/><stop offset="1" stop-color="#e6eefb"/></linearGradient></defs>
+  <path d="M20 165 251 43 506 169 276 246Z" fill="url(#scene-ground)"/>
+  <g stroke="#c5d9cf" stroke-width="1" fill="none"><path d="m76 137 253 126M123 112l254 126M171 87l255 126M222 63l254 126M67 189 302 67M119 215 356 94M170 240 408 120"/></g>
+  <path d="m81 171 114-59 178 88-31 17-147-73-83 43Z" fill="#fff"/>
+  <path d="m114 171 81-43 178 88" fill="none" stroke="#b5c7bd" stroke-width="2" stroke-dasharray="5 6"/>
+  <ellipse cx="256" cy="178" rx="100" ry="26" fill="#223f3020"/>
+  <path d="m171 117 82 42v-90l-82-41Z" fill="#dce6f3"/><path d="m253 159 102-52V18L253 69Z" fill="#a5bfe4"/><path d="m171 28 82 41 102-51-82-40Z" fill="url(#scene-roof)" transform="translate(0 33)"/>
+  <path d="m171 61 82 41 102-51" fill="none" stroke="#739dd8" stroke-width="3"/>
+  <path d="m198 126 36 18v-48l-36-18Z" fill="#f8fbff"/>
+  <path d="m206 100 20 10m-20 0 20 10m-20 0 12 6" stroke="#a9bad1" stroke-width="3"/>
+  <path d="m271 111 60-30v45l-60 30Z" fill="#3869b8"/>
+  <path d="m295 112 15-8v15l-15 8Z" fill="#c6e3fc"/>
+  <path d="m299 110v-5q0-10 9-10 5 0 5 7v3" fill="none" stroke="#c6e3fc" stroke-width="3"/>
+  <g transform="translate(92 111)"><ellipse cx="0" cy="64" rx="23" ry="9" fill="#234d3420"/><path d="m-15 26 22 12V0l-22-12Z" fill="#fdfefe"/><path d="m7 38 14-7V-7L7 0Z" fill="#c6d8f2"/><path d="m-15-12 22 12 14-7-23-12Z" fill="#e1ebf8"/><path d="m-8 7 9 5m-9 1 9 5" stroke="#7296c5" stroke-width="2"/><circle cx="-9" cy="49" r="8" fill="#3869b8"/><path d="M-18 70v-6q0-8 9-8t9 8v6Z" fill="#3869b8"/></g>
+  <g transform="translate(388 151)"><ellipse cx="0" cy="60" rx="23" ry="9" fill="#234d3420"/><path d="m-15 24 22 12V0l-22-12Z" fill="#fdfefe"/><path d="m7 36 14-7V-7L7 0Z" fill="#b6d7c6"/><path d="m-15-12 22 12 14-7-23-12Z" fill="#e2f1e9"/><path d="m-8 7 9 5m-9 1 9 5" stroke="#67a78a" stroke-width="2"/><circle cx="-9" cy="46" r="8" fill="#4d8a6a"/><path d="M-18 68v-6q0-8 9-8t9 8v6Z" fill="#4d8a6a"/></g>
+  <g fill="#91b69c"><ellipse cx="432" cy="113" rx="13" ry="18"/><ellipse cx="136" cy="200" rx="12" ry="16"/><ellipse cx="383" cy="72" rx="10" ry="14"/></g><g stroke="#72947b" stroke-width="3"><path d="M432 125v15m-296 70v14m247-139v13"/></g>
+</svg>
+</template>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-19",
+  "checkpoint": "T06 durable SQL storage and queue",
+  "verification": {
+    "command": "./scripts/verify.ps1",
+    "exitCode": 0,
+    "unit": 41,
+    "http": 18,
+    "sql": 15,
+    "frontendUnit": 7,
+    "chromium": 8,
+    "total": 89,
+    "skipped": 0,
+    "publish": "PASS",
+    "contractDrift": "PASS",
+    "remainingTestDatabases": 0
+  },
+  "database": {
+    "engine": "SQL Server Express LocalDB",
+    "version": "17.0.4025.3",
+    "providerCompatibilityLevel": 160,
+    "isolatedTestRoot": ".runtime/sql-tests"
+  },
+  "packages": {
+    "efCore": "10.0.13",
+    "dotnetEf": "10.0.13",
+    "pkcs": "10.0.13",
+    "vulnerableInfrastructurePackages": 0
+  },
+  "gates": {
+    "G0": "LIVE_BLOCKED",
+    "G1": "NATIVE_LOAD_ONLY",
+    "G2": "NOT_RUN",
+    "G3": "LOCAL_SQL_HTTP_SUBSETS_ONLY",
+    "G4": "NOT_RUN",
+    "G5": "NOT_RUN",
+    "G6": "NOT_RUN",
+    "G7": "LOCAL_SUBSETS_ONLY"
+  },
+  "liveAuthentication": "NOT_RUN",
+  "artifactDownloads": "NONE",
+  "azureChanges": "NONE",
+  "hashes": [
+    {
+      "path": "src/Gateway.Infrastructure/Persistence/SqlExportQueue.cs",
+      "sha256": "A0FCA5BD139FC5065711495382ECC9EA57D7393C7307E3301B9807D5D4CFCA43"
+    },
+    {
+      "path": "src/Gateway.Infrastructure/Persistence/GatewayDbContext.cs",
+      "sha256": "1E1750203EC15D06F8E84C927297F32A3C7F5DFCF88ABBE699759770DB5C89A6"
+    },
+    {
+      "path": "src/Gateway.Infrastructure/packages.lock.json",
+      "sha256": "9CAE99BB13557E04E1D7A0B22A63362647577025160B737E0C83EF269CF9C070"
+    },
+    {
+      "path": "tests/Gateway.SqlTests/QueueTests.cs",
+      "sha256": "ED6C0D5FB2F3965C44FCBAC26C0AA75C7AAA357B01D4E91384A5F09121AB8E6A"
+    },
+    {
+      "path": "tests/Gateway.SqlTests/packages.lock.json",
+      "sha256": "9510A2E62227D97E4B6FBD06EE0BA3BABEF2249638C9CE0A7FC0253F73E8AC3D"
+    },
+    {
+      "path": "infra/sql/gateway-schema.sql",
+      "sha256": "9CBD214571D630280318C1B704F26F494280944F47EE45A93DD6CEDE94A8B180"
+    },
+    {
+      "path": ".runtime/publish/Gateway.Web.dll",
+      "sha256": "FF30F6A9B85EB641789F9E79D522E81D5353FAC9915C407686AA68E5629555E9"
+    }
+  ]
+}

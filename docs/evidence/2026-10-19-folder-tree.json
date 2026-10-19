@@ -1,0 +1,66 @@
+{
+  "run_id": "2026-10-19-folder-tree",
+  "recorded_at_utc": "2026-10-19T03:02:14.3940667+00:00",
+  "scope": "Original folder-tree/list/details UI preview; no connector",
+  "verification": {
+    "command": "./scripts/verify.ps1",
+    "exit_code": 0
+  },
+  "tests": {
+    "browser_failures": 0,
+    "frontend_unit": 7,
+    "total_passed": 73,
+    "unit": 41,
+    "browser": 7,
+    "http": 18
+  },
+  "packages_added": 0,
+  "package_audit_known_vulnerabilities": 0,
+  "ui": {
+    "copy_or_download_from_simulation": false,
+    "synthetic_hierarchy_dev_only": true,
+    "keyboard_tree": true,
+    "narrow_viewport": "390x844",
+    "folder_tree": true,
+    "desktop_viewport": "1440x1000",
+    "breadcrumbs": true,
+    "global_search": true
+  },
+  "publish": {
+    "fixture_entry_emitted": false,
+    "result": "PASS_LOCAL_SINGLE_WEB_PACKAGE",
+    "artifacts": [
+      {
+        "path": ".runtime/publish/Gateway.Web.dll",
+        "bytes": 55296,
+        "sha256": "AC07A774829A1FE69DC1CF2162649A19BC900A19D8C45F4AF1710CF15E6677E1"
+      },
+      {
+        "path": ".runtime/publish/wwwroot/app/assets/index-E6H1cH0a.js",
+        "bytes": 308812,
+        "sha256": "DB7FE39F82EB56FB52BB55958A2833211FA93A04454CB7FD3C155A75B15157DF"
+      },
+      {
+        "path": ".runtime/publish/wwwroot/app/assets/index-Ic4EpEOH.css",
+        "bytes": 15404,
+        "sha256": "366A7473D80C053852E6D7A1E3F2CDE61E244D220A8EEA4A1AD6109A382812F3"
+      }
+    ]
+  },
+  "external": {
+    "onedrive_connected": false,
+    "sharepoint_connected": false,
+    "tenant_mutations": false,
+    "azure_deployed": false
+  },
+  "gates": {
+    "G1": "NATIVE_LOAD_ONLY_FULL_GATE_BLOCKED",
+    "G5": "NOT_RUN",
+    "G6": "BLOCKED_SCANNER_PROOF",
+    "G0": "BLOCKED_LIVE_CONFIG",
+    "G2": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G7": "PARTIAL_LOCAL_FRONTEND_TESTS_ONLY"
+  }
+}
