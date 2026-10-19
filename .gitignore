@@ -25,4 +25,5 @@ src/Gateway.Web/wwwroot/app/
 !.env.example
 **/appsettings.Local.json
 **/mip.local.json
+**/owner-only.local.json
 **/sdk-cache/

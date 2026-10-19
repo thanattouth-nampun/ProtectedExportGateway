@@ -1,5 +1,7 @@
 # Local implementation checkpoint
 
+Current scope is [ADR-013 standalone owner-only source](standalone-owner-only-mvp.md). External content connectors are deferred. Run `scripts/verify-protected-spike.ps1` for five offline config/hash checks; it does not authenticate or verify protected content. Live owner-only commands require the [target/permission review packet](owner-only-spike-runbook.md). Legacy unprotected-source/report tooling and runtime remain fail-closed foundations, not protected-intake acceptance.
+
 This checkpoint provides a headless native spike, tested domain/OOXML/report foundation, .NET BFF skeleton, React HTML workspace and [durable SQL queue](sql-queue-checkpoint.md). It is **not M0 feasibility demonstrated, M1 workflow demonstrated, or a live MVP**. Authenticated lifecycle APIs, intake/worker integration and the full Owner/Reports/Jobs/Audit product flows remain to implement. Product navigation currently identifies these dependencies explicitly.
 
 ## Prerequisites and local commands

@@ -5,6 +5,8 @@ test('searchable list, owner filtering and HTML details', async ({ page }) => {
   await page.goto('/spike.html');
   await expect(page.getByText('3 visible documents')).toBeVisible();
   await expect(page.locator('canvas')).toHaveCount(0);
+  await expect(page.getByText('FUTURE SOURCES', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Not connected', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: '3D', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: /Project delivery plan/ }).click();
   await expect(page.getByRole('complementary', { name: 'Document details' }).getByRole('heading', { name: 'Project delivery plan' })).toBeVisible();

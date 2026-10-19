@@ -1,0 +1,24 @@
+{
+  "Processor": {
+    "TenantId": "<tenant-guid>",
+    "ClientId": "<processor-app-guid>",
+    "TenantDomain": "<verified-tenant-domain>",
+    "CertificateThumbprint": "<CurrentUser-My-certificate-thumbprint>",
+    "InputPath": "<absolute-private-owner-only-synthetic-xlsx-path>",
+    "PrivateRunRoot": "<absolute-precreated-private-run-root-separate-from-source>",
+    "LabelOnlyId": "<unused-by-owner-only-spike>",
+    "ConfidentialId": "<unused-by-owner-only-spike>",
+    "UdpId": "<existing-source-user-defined-label-guid>",
+    "RecipientA": "<validated-recipient-a-address>",
+    "RecipientB": "<validated-recipient-b-address>",
+    "ExpectedProtectionOwner": "<validated-original-rms-owner-address>",
+    "AllowedResources": [],
+    "ConsentedHosts": [],
+    "OperatorAcknowledgedSdkNetworkAndDiagnostics": false
+  },
+  "ExpectedInputSha256": "<uppercase-sha256-of-original-encrypted-source>",
+  "ExpectedOriginalOwner": "<validated-original-rms-owner-address>",
+  "AuthorizationReference": "<reviewed-target-and-owner-delegation-authorization-reference>",
+  "SyntheticFixtureAcknowledged": false,
+  "OwnerDelegationApproved": false
+}

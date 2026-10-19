@@ -1,5 +1,7 @@
 # 03 — Technology and decisions v4.2
 
+> ADR-013 update (19 October 2026): [Standalone owner-only MVP](standalone-owner-only-mvp.md) supersedes conflicting unprotected-library-source/service-owned-output assumptions below. External content connectors are deferred; Entra/MIP/Azure remain. Legacy library contracts below are implementation history until revised protected intake/owner mapping/G1/G2/G6 are proven. Report generation and all unaffected controls remain in scope.
+
 > Current decision v4.2 (19 October 2026): ADR-012 removes the 3D renderer. Use the searchable HTML list/detail workspace with React/TypeScript and .NET BFF. Historical 3D evidence is not a current deliverable. All functional, security, native SDK and Azure controls remain required.
 
 Selections define the current baseline. Local validation is recorded in the current evidence; live/deployment acceptance remains incomplete.
@@ -86,3 +88,7 @@ The Razor/static and subsequent React/renderer choices are historical. ADR-012 r
 The user explicitly removed 3D on 19 October 2026 because it does not fit this project. Keep React/TypeScript/Vite/router/query/forms/Tailwind and the .NET BFF/worker. Use an accessible searchable HTML document list with owner filtering, selected details, upload/version/publish forms and job/audit views. Remove Three/R3F/Drei, camera controls, WebGL assets/runtime code and renderer-only checks.
 
 Same-origin cookie/OIDC/CSRF, generated DTOs, identity-cache clearance and all report/library/MIP/scanner/Azure controls remain mandatory. T31 is retired; G7 is frontend/session/accessibility/load/cloud regression without renderer/FPS gates. Retain old evidence as historical; removal does not convert any live gate into PASS. See [current assessment](15-long-term-stack-assessment.md).
+
+## ADR-013 — Standalone protected owner-only source
+
+Accepted user decision: defer external content connectors; issue per-recipient copies of already protected owner-only synthetic XLSX after separate portal ACL authorization, preserving the original RMS owner. This supersedes ADR-004's service-owner assumption for the new library path and ADR-009's unprotected-only input restriction. Reports retain their context-specific protection. See [complete decision/dependencies](standalone-owner-only-mvp.md) and [live review packet](owner-only-spike-runbook.md). Existing intake/Ready constraints stay fail-closed until this path passes G1/G2/G6 and production contracts are explicitly versioned.

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../src/Gateway.Application/Gateway.Application.csproj" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.83.3" />
     <PackageReference Include="Microsoft.InformationProtection.File" Version="1.18.124" />
   </ItemGroup>

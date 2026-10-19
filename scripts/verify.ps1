@@ -19,6 +19,7 @@ try {
     Invoke-Checked { npm.cmd run test:browser }
 } finally { Pop-Location }
 Invoke-Checked { dotnet test tests/Gateway.UnitTests --no-restore }
+& (Join-Path $PSScriptRoot 'verify-protected-spike.ps1')
 & (Join-Path $PSScriptRoot 'verify-sql.ps1')
 $env:GATEWAY_EXPORT_OPENAPI = Join-Path $repoRoot 'src/Gateway.Web/openapi.json'
 $beforeContract = (Get-FileHash src/Gateway.Client/src/contracts/api.d.ts).Hash

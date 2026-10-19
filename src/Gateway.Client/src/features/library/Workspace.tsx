@@ -27,7 +27,7 @@ export function Workspace({ documents, folders, simulation = false, requestCopy 
       <label>Business owner<select value={owner} onChange={e => setOwner(e.target.value)}><option value="">All authorized owners</option>
         {[...new Set(documents.map(d => d.owner))].map(o => <option key={o}>{o}</option>)}</select></label>
       <span className="result-count">{visible.length} visible {visible.length === 1 ? 'document' : 'documents'}</span></div>
-    <div className="workspace-grid with-folders"><FolderNavigation folders={directory} selectedId={searching ? null : currentFolder?.id ?? null} onSelect={selectFolder} simulation={simulation}/><section className="collection" aria-label="Authorized documents">
+    <div className="workspace-grid with-folders"><FolderNavigation folders={directory} selectedId={searching ? null : currentFolder?.id ?? null} onSelect={selectFolder}/><section className="collection" aria-label="Authorized documents">
       <nav className="breadcrumbs" aria-label="Folder path"><button onClick={() => selectFolder(null)} aria-current={!currentFolder || searching ? 'location' : undefined}>All documents</button>
         {!searching && trail.map((folder, index) => <span key={folder.id}><span aria-hidden="true">/</span><button aria-current={index === trail.length - 1 ? 'location' : undefined} onClick={() => selectFolder(folder.id)}>{folder.name}</button></span>)}</nav>
       <div className="list-heading"><h2>{searching ? 'Search results' : currentFolder?.name ?? 'Documents'}</h2></div>

@@ -1,6 +1,8 @@
-# Repository instructions — v4.2
+# Repository instructions — v4.3
 
-Read README.md, docs/01–15 and prototype/README.md. ADR-012 supersedes the former renderer requirement: the user removed 3D from the project. Adopt React/TypeScript/Vite with a searchable HTML list/detail workspace with existing .NET API/BFF/native worker and preserve all functional/security/Azure controls. Do not drop modules or expand to AI/unrestricted uploads/decryption/approval/multi-tenancy/catalog. English-only application UI and identifiers; planning documents may remain Thai. Use self-hosted Inter with system fallbacks per docs/13. Translate legacy Thai UI examples; preserve user-supplied metadata and tenant label names.
+ADR-013 (`docs/standalone-owner-only-mvp.md`) is the latest user-approved product boundary: standalone library intake targets already MIP-protected owner-only synthetic XLSX, retains the original RMS owner on per-recipient copies, and defers SharePoint/OneDrive/other content connectors. Entra/MIP/Azure remain required. Protected-source handling is currently a guarded feasibility spike, not an eligible production upload path; do not relax the existing parser/release gates to pretend support.
+
+Read README.md, docs/01–15, ADR-013 and prototype/README.md. ADR-012 removes 3D. Keep React/TypeScript/Vite and .NET API/BFF/native worker and all unaffected controls. Do not drop report/library modules or add AI, unrestricted uploads/decryption, approval workflows, multi-tenancy or external catalogs. Only the bounded authorized protected-source path explicitly described in ADR-013 supersedes the former blanket no-decryption library assumption. English UI/identifiers and self-hosted Inter remain required.
 
 ## First work
 
@@ -8,12 +10,13 @@ Follow docs/07 dependency order. Validate native SDK identity, user-defined prot
 
 ## Invariants
 
-- DocumentPublisher creates owner-bound drafts and uploads bounded synthetic unprotected XLSX; publisher+owner required for mutations. Seed fixtures pass same validation gate; no protected-source decryption workflow.
-- Quarantine first, trusted clean scan then bounded OOXML validation then new source-version promotion; owner publishes explicitly. Fake/unknown/error/remediated scans never make live eligible/published sources. Scanner exit0 alone is not Clean.
+- DocumentPublisher manages private drafts and a portal ACL. Protected source acceptance requires the authenticated uploader's trusted same-tenant mapping to match the independently observed original RMS owner; Author metadata/uploader alone is not ownership proof. Publisher+verified owner required for mutations. Legacy unprotected fixtures/parser remain report/test foundations, not evidence for protected intake.
+- Quarantine first. Protected intake must prove authorized private content inspection, trusted malware scan and bounded decrypted OOXML validation, binding encrypted and inspection hashes and preserving the original source. Envelope scan alone is not Clean evidence. No promotion/publish until revised G6; fake/unknown/error/remediated/exit0-only scans never qualify.
 - Do not elevate web/MIP worker to admin for scanning; validate a narrow trusted helper with path/token allowlist and fixed commands. Do not execute workbook formulas/Office or add AV exclusions to force success.
 - Metadata/ACL/version/publish/withdraw use optimistic concurrency and transactional audit. New Draft does not replace current published version; latest published/ACL/source status checked at issuance and download.
 - Use File SDK in worker. Direct Policy/Protection SDK is not initially required.
 - Distinguish business owner, requester, processor/RMS owner and authorized recipient. Do not delegate protection ownership to downloader by default.
+- ADR-013 copies retain the independently verified original RMS owner. Any processor delegation to that owner requires scoped authorization and live proof; it must never be set to the downloader. Legacy service-owned snapshots must not silently become owner-preserving snapshots; version the policy/contract when implementing the production path.
 - Per-user document copy contains only the verified requester as ordinary recipient. No broad group/domain grants or accumulated users. Label can be shared; publishing rights are per copy.
 - Exact edit/save profile is custom and client-tested. Built-in Editor can include Copy/Export; never claim equivalent isolation without inspecting rights.
 - Source and identity come from trusted server records bound to tid/oid. Reject caller-supplied recipients/labels/paths/owner.
@@ -30,7 +33,7 @@ Follow docs/07 dependency order. Validate native SDK identity, user-defined prot
 
 Follow docs/13–15 and ADR-012: Reader uses a searchable HTML document list with owner filtering, selection and accessible detail/actions. Publisher has own upload/version/publish flows; Auditor metadata only. Do not reintroduce a 3D renderer, camera, WebGL dependencies or decorative security counters.
 
-The user approved a folder-tree/list/details UI preview. Folder navigation is an optional projection of authorized metadata and must not grant file access, infer business ownership or introduce a SharePoint/OneDrive connector. The synthetic hierarchy and disconnected-source examples belong only to the development harness. Future server folder/connector contracts require explicit scoped design; preserve global search and the same release/intake controls. See docs/folder-navigation-preview.md.
+Folder/tree/list/details is an authorized local metadata projection, not a connector or ownership inference. Remove disconnected-source examples from the active harness under ADR-013; historical evidence can remain. External connectors are deferred. Preserve global search, keyboard behavior and release/intake controls.
 
 21st.dev is a React component source catalog; review original source/licenses/dependencies/accessibility and consistent design before reuse. One React UI, no dual Razor/island baseline. Existing prototype is legacy buildless design reference, not the production React application. Production must not include fixture persona switch/simulated steps/fake downloadable artifact.
 

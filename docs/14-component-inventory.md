@@ -1,5 +1,7 @@
 # 14 — Component sourcing and React implementation v4.2
 
+> ADR-013 update (19 October 2026): [Standalone owner-only MVP](standalone-owner-only-mvp.md) supersedes conflicting unprotected-library-source/service-owned-output assumptions below. External content connectors are deferred; Entra/MIP/Azure remain. Legacy library contracts below are implementation history until revised protected intake/owner mapping/G1/G2/G6 are proven. Report generation and all unaffected controls remain in scope.
+
 ADR-012 (19 October 2026) removes 3D. Use one React/TypeScript HTML workspace with the .NET BFF. Preserve the approved semantic theme and self-hosted Inter. No catalog source has blanket approval.
 
 21st.dev is a component discovery catalog. Review original source, exact author/repository/file/revision, license/notices, dependencies, accessibility, bundle cost and modifications before copying. Reject unknown licensing; implement an original semantic alternative. Do not run unreviewed catalog installers or remote runtime scripts. Next/server-only components do not automatically work in Vite.

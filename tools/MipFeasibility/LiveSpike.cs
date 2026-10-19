@@ -6,6 +6,7 @@ using Microsoft.InformationProtection;
 using Microsoft.InformationProtection.Exceptions;
 using Microsoft.InformationProtection.File;
 using Microsoft.InformationProtection.Protection;
+using Gateway.Application;
 
 internal sealed record SpikeConfig(Guid TenantId, Guid ClientId, string TenantDomain, string CertificateThumbprint,
     string InputPath, string PrivateRunRoot, string LabelOnlyId, string ConfidentialId, string UdpId,
@@ -32,8 +33,8 @@ internal static class LiveSpike
                 throw new InvalidOperationException("CONFIG_INVALID");
             using var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
-            var certs = store.Certificates.Find(X509FindType.FindByThumbprint, c.CertificateThumbprint, validOnly: true);
-            if (certs.Count != 1 || !certs[0].HasPrivateKey) throw new InvalidOperationException("CERTIFICATE_UNAVAILABLE");
+            var certs = store.Certificates.Find(X509FindType.FindByThumbprint, c.CertificateThumbprint, validOnly: false);
+            if (certs.Count != 1 || !ClientCertificatePolicy.IsUsable(certs[0],DateTimeOffset.UtcNow)) throw new InvalidOperationException("CERTIFICATE_UNAVAILABLE");
             using var cert = certs[0];
             var run = Path.Combine(c.PrivateRunRoot, Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(run); // Operator must provision a private ACL on the parent first.

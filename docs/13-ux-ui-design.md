@@ -1,5 +1,7 @@
 # 13 — UX/UI specification v4.2
 
+> ADR-013 update (19 October 2026): [Standalone owner-only MVP](standalone-owner-only-mvp.md) supersedes conflicting unprotected-library-source/service-owned-output assumptions below. External content connectors are deferred; Entra/MIP/Azure remain. Legacy library contracts below are implementation history until revised protected intake/owner mapping/G1/G2/G6 are proven. Report generation and all unaffected controls remain in scope.
+
 Decision: 19 October 2026, ADR-012. The user removed 3D from the project. The product uses a searchable HTML document list with owner filtering and readable details/actions. React/TypeScript, .NET BFF, English UI, Inter and the approved theme remain. Old renderer evidence is historical and does not define current acceptance.
 
 ## Navigation and authorization

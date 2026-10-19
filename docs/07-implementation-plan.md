@@ -1,8 +1,12 @@
 # 07 — Implementation backlog and delivery gates v4.2
 
+> ADR-013 update (19 October 2026): [Standalone owner-only MVP](standalone-owner-only-mvp.md) supersedes conflicting unprotected-library-source/service-owned-output assumptions below. External content connectors are deferred; Entra/MIP/Azure remain. Legacy library contracts below are implementation history until revised protected intake/owner mapping/G1/G2/G6 are proven. Report generation and all unaffected controls remain in scope.
+
 > Current decision v4.2 (19 October 2026): ADR-012 removes the 3D renderer. Use the searchable HTML list/detail workspace with React/TypeScript and .NET BFF. Historical 3D evidence is not a current deliverable. All functional, security, native SDK and Azure controls remain required.
 
 ลำดับนี้คือ dependency ไม่ใช่คำสั่งเปิดหลาย agents ไม่มีการกำหนด timeline เป็นสัญญา ให้ estimate หลัง G1 เพื่อทราบ environment complexity
+
+ADR-013 execution update: first finish the standalone scope/guarded owner-only source spike, then run the approved protected-source G1/G2 experiment before expanding Library screens. Preserve the completed T06 SQL checkpoint. T07/T22 must bind portal ownership to verified original RMS ownership; T23–T26 must redesign protected content scan/structural evidence. HR report paths remain. External connectors are deferred. The old unprotected-only sequence below is superseded for the new Library path; no legacy test is new protected-source acceptance.
 
 ## Tasks
 
@@ -89,6 +93,8 @@ The earlier local checkpoint is historical evidence in evidence/2026-10-19-local
 Subsequent T12 UI experiment: user approved folder-tree/list/details with synthetic preview and keyboard/global-search/breadcrumb checks. See folder-navigation-preview.md and evidence/2026-10-19-folder-tree.md. This does not complete T12 or authorize a SharePoint/OneDrive connector; T06 and all live gates remain required.
 
 Subsequent T06 checkpoint: SQL Server EF schema/queue, immutable copy/report submissions, requester isolation, leases/fencing, retries/recovery and transactional audit are implemented and tested on isolated local SQL Server databases. See sql-queue-checkpoint.md and evidence/2026-10-19-sql-queue.md. This is a storage/queue milestone; T07/T08/T22/T23/T10 and live gates remain required before workflow acceptance. There is no Ready writer or downloadable artifact.
+
+ADR-013 preparation checkpoint: standalone scope/precedence updates, removed connector placeholders, pure observed-source/copy rules and guarded owner-only preflight/live-candidate commands are implemented. 107 local tests plus 5 offline CLI checks pass; no live owner-only authentication/inspection or G1/G2/G6 acceptance. See evidence/2026-10-19-owner-only-preparation.md and owner-only-spike-runbook.md. Complete the target/permission worksheet and obtain scoped approval before the live experiment.
 
 ```text
 Completed tasks:

@@ -1,5 +1,7 @@
 # Folder navigation preview — 19 October 2026
 
+ADR-013 update: standalone local folders remain; SharePoint/OneDrive/content connectors are deferred, and the old disconnected-source panel was removed from the active harness. Descriptions/screenshots of that panel below are historical, not current integration or roadmap commitments.
+
 User-authorized UI experiment: folder tree + file list + HTML details, now using adapted source from the supplied [Magic UI File Tree](https://magicui.design/docs/components/file-tree). This extends the HTML workspace under ADR-012; it does not restore 3D or implement a SharePoint/OneDrive connector.
 
 ## Implemented behavior

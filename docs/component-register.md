@@ -1,5 +1,7 @@
 # Dependency, component and asset review — local checkpoint
 
+ADR-013 adds an owner-only candidate to the existing File SDK/MSAL tool, reusing the shared Application inspection predicates. No SDK/package versions were upgraded. Its project reference brings the already-pinned Application/ClosedXML dependency graph into the tool lockfile; protected input is never parsed by ClosedXML. Local compile/native/preflight checks are not live auth, ownership or rights evidence.
+
 Current v4.2: ADR-012 removes Three/R3F/Drei and renderer-only transitive packages. Exact retained package versions/lockfiles remain tested local pins, not live G1/G7 certification. TypeScript5.9.3 satisfies the DTO generator peer range; Node24.16.0 supports the retained Vite build. Earlier renderer compatibility/benchmark records remain historical.
 
 | Item | Origin/license | Decision and verification |

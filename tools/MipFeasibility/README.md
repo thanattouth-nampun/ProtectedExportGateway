@@ -1,5 +1,11 @@
 # Headless MIP feasibility tool
 
+ADR-013 adds `owner-only-preflight <private-config>` and `owner-only-run <private-config>` for the already-protected source candidate. See [standalone decision](../../docs/standalone-owner-only-mvp.md), [approval/runbook](../../docs/owner-only-spike-runbook.md) and `owner-only.config.example.json`. This is separate from the legacy `run` report/unprotected-source experiment described below. Neither path is a production worker or a completed gate.
+
+Preflight exits before certificate lookup/MIP/network: success proves only acknowledged config and pinned bytes/size. It does not prove XLSX structure, protection, ownership or authorization. Unknown fields reject. The live candidate uses certificate app-only authentication with explicit original-owner **engine** delegation (including policy/consumption), not merely handler delegation and not the downloader. Required target/permission authorization remains ungranted; no live invocation was performed. No grant/consent/label update is made by the tool.
+
+Live candidate inspects owner-only protected input, checks effective OWNER/EXPORT, writes fresh A/B UserRights copies with the same label/original owner, independently inspects the committed outputs and checks source unchanged. No explicit protection removal or decrypted temporary file API is called. Native SDK internals/private runtime handling still require review. Matching exit 3 remains PARTIAL_NOT_PASSED; output is private experimental material and has no Blob binding/Ready/download/intake eligibility. Do not reuse it as a simulated product download.
+
 This is a local spike, not a production worker. It uses File SDK 1.18.124 and MSAL 4.83.3 on Windows x64/.NET 10. Native DLL loading has been observed; tenant authentication/protection has not.
 
 ```powershell

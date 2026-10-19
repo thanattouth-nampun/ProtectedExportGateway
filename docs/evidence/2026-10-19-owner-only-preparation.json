@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-19",
+  "checkpoint": "ADR-013 standalone owner-only source preparation",
+  "mode": "LOCAL_PREPARATION_ONLY",
+  "tests": {
+    "unit": 59,
+    "sql": 15,
+    "http": 18,
+    "frontend": 7,
+    "chromium": 8,
+    "total": 107,
+    "offlineCliChecks": 5
+  },
+  "verification": {
+    "fullScriptExit": 0,
+    "finalSpikeScriptExit": 0,
+    "nativeLoad": "PASS",
+    "remainingTestDatabases": 0
+  },
+  "live": {
+    "authentication": "NOT_RUN",
+    "sourceInspection": "NOT_RUN",
+    "protection": "NOT_RUN",
+    "office": "NOT_RUN",
+    "scanner": "NOT_RUN",
+    "azure": "NOT_RUN",
+    "gatePassed": false
+  },
+  "target": {
+    "tenantId": "USER_SUPPLIED_LOCAL_ONLY_NOT_LIVE_VERIFIED",
+    "verifiedDomain": "MISSING",
+    "processorApp": "MISSING_OR_UNCONFIRMED",
+    "approval": "NOT_GRANTED"
+  },
+  "hashes": [
+    {
+      "path": "tools/MipFeasibility/OwnerOnlySpike.cs",
+      "sha256": "F7823256CF47EE3ABD1A979340EA5254BFC3C6764B423EEC60E5C6031E70051D"
+    },
+    {
+      "path": "tools/MipFeasibility/owner-only.config.example.json",
+      "sha256": "E5672517A12315EEFEE57D8EC038247B6A26416AFC3A6947DC807F5ABF4EB9A7"
+    },
+    {
+      "path": "tools/MipFeasibility/packages.lock.json",
+      "sha256": "F9C360F98E8A226E495AD29EE137ACCD85CE437CB1D35A00D420E96E1B6E1443"
+    },
+    {
+      "path": "src/Gateway.Application/ProtectedSourceRules.cs",
+      "sha256": "521F89227FD6C4009E95D91AF52218C4E34BE74BE2A2D2249D383D49ADB97907"
+    },
+    {
+      "path": "tests/Gateway.UnitTests/ProtectedSourceTests.cs",
+      "sha256": "5C0F097E45F50768BC05AD7C8EDAD62B180E30F662C92E8086A14B192ED2CDCB"
+    },
+    {
+      "path": "scripts/verify-protected-spike.ps1",
+      "sha256": "011DB274D78DBA1571DEB964F1C73E794A7AFF4EA39964EE3C44B2AE413ECCB2"
+    },
+    {
+      "path": ".runtime/publish/Gateway.Web.dll",
+      "sha256": "24C3778584EBE272AE237D2194177009DEA92D28B591E1922CDDD46284BCA310"
+    }
+  ]
+}

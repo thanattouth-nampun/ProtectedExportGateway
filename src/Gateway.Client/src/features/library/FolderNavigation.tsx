@@ -2,8 +2,8 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import type { FolderView } from './model';
 import { Tree, Folder } from '../../components/magicui/file-tree';
 
-export function FolderNavigation({ folders, selectedId, onSelect, simulation }: {
-  folders: FolderView[]; selectedId: string | null; onSelect: (id: string | null) => void; simulation: boolean;
+export function FolderNavigation({ folders, selectedId, onSelect }: {
+  folders: FolderView[]; selectedId: string | null; onSelect: (id: string | null) => void;
 }) {
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set(folders.flatMap(f => [f.id, ...f.children.map(c => c.id)])));
   const [focused, setFocused] = useState<string | null>(null);
@@ -50,6 +50,5 @@ export function FolderNavigation({ folders, selectedId, onSelect, simulation }: 
     <button className={'all-documents ' + (selectedId === null ? 'selected' : '')} aria-pressed={selectedId === null} onClick={() => onSelect(null)}><span aria-hidden="true">▦</span> All documents</button>
     {folders.length ? <Tree selectedId={selectedId ?? undefined} onSelect={id => { focus(id); onSelect(id); }} expandedItems={[...expanded]} onExpandedChange={ids => setExpanded(new Set(ids))}>{render(folders, null)}</Tree> : <p className="folder-help">Folders appear when authorized documents are available.</p>}
     <p className="folder-help">Only folders containing documents in this view are shown.</p>
-    {simulation && <div className="future-sources"><span className="eyebrow">FUTURE SOURCES</span><span>SharePoint <small>Not connected</small></span><span>OneDrive for Business <small>Not connected</small></span></div>}
   </div></details>;
 }
