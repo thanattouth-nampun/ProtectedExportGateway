@@ -73,6 +73,8 @@ public sealed class ExportAttemptRow
 }
 public sealed class AuditEventRow
 {
+    public Guid? DocumentId { get; set; }
+    public long? DocumentRevision { get; set; }
     public Guid Id { get; set; }
     public Guid TenantId { get; set; }
     public Guid? JobId { get; set; }

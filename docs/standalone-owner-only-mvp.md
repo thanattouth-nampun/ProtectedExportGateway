@@ -1,5 +1,7 @@
 # ADR-013 — Standalone owner-only source and authorized per-recipient copies
 
+20 October update: [ADR-014](member-self-service-workspace.md) replaces Publisher/pre-enrolled-owner empty-draft enrollment with a workspace for every verified internal tenant Member. Source ownership/protection/intake/release conditions below remain; Member status is not RMS ownership proof.
+
 Decision accepted by the user on 19 October 2026. This document supersedes conflicting v4.2 unprotected-source-only library assumptions in docs/01–15 and AGENTS.md. ADR-012 (no 3D), both product modules, the adopted stack and all unaffected release/security/Azure gates remain in force. Existing evidence is historical evidence for its original scope, not acceptance of this new path.
 
 ## Product boundary

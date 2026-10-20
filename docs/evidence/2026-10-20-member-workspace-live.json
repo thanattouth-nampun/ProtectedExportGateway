@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-20",
+  "approval": "Human approved exact web acct ID-token claim and assignmentRequired=false rollout",
+  "tenantId": "9fbc4f5d-56ec-4074-82f0-69d9a86a7c06",
+  "webClientId": "a834c776-387c-43aa-8d55-3ab62a08acf6",
+  "tenantSetup": "VERIFIED",
+  "acctOptionalIdTokenClaim": "EXACT_READBACK_MATCH",
+  "assignmentRequired": false,
+  "existingRoleAssignmentsPreserved": true,
+  "existingConsentPreserved": true,
+  "unrelatedApplicationConfigPreserved": true,
+  "localMemberArtifactActivated": true,
+  "freshMemberLogin": "PASS_A_AND_B",
+  "liveTwoMemberDraftIsolation": "PASS_OWN_LIST_CREATE_A_TO_OWNER_AND_B_TO_A_READ_AUDIT_DENIAL",
+  "liveSymmetricCrossMemberUpdateDenial": "NOT_RUN_SEPARATE_SQL_TESTS_PASS",
+  "nonRoleMemberB": "PASS_LOGIN_ROLES_EMPTY_CREATE_RELOAD_UPDATE_POST_LOGIN_ZERO_DIRECT_ASSIGNMENTS",
+  "drafts": {
+    "A": { "id": "eb656259-e8cc-4dd4-b09f-1e87d493c523", "revision": 1, "aclCount": 0, "auditCount": 1 },
+    "B": { "id": "0ebc0f54-59dc-426f-a1f4-6ce764f2ccb2", "revision": 2, "aclCount": 0, "auditCount": 2 },
+    "originalOwner": { "revision": 4, "aclRevision": 3, "auditCount": 4, "unchanged": true }
+  },
+  "sourceVersionCount": 0,
+  "evidenceMode": "Actual Entra sessions and local SQL synthetic metadata; no token extraction or intercepted API",
+  "priorOwnerDraftCount": 1,
+  "actualDatabaseMigrated": false,
+  "newAzureResources": 0,
+  "additionalAzureResourceEstimateThb": 0,
+  "cloudDeployed": false,
+  "protectedUploadEnabled": false,
+  "protectedDownloadEnabled": false,
+  "gates": { "G1": "PARTIAL", "G2": "DEFERRED_NOT_PASSED", "G6": "NOT_PASSED" }
+}

@@ -1,0 +1,39 @@
+{
+  "milestone": "Owner private draft metadata and portal ACL",
+  "date": "2026-10-20",
+  "implementation": [
+    "SQL owner draft/ACL store",
+    "Document-bound transactional audit",
+    "If-Match rowversion concurrency",
+    "React owner forms and identity cleanup",
+    "Server OIDC certificate configuration"
+  ],
+  "checks": {
+    "unitPassed": 101,
+    "sqlPassed": 22,
+    "httpPassed": 28,
+    "frontendUnitPassed": 7,
+    "browserPassed": 14,
+    "totalPassed": 172,
+    "lockedRestore": "PASS",
+    "openApiContract": "MATCHED",
+    "sameOriginLocalRelease": "PASS"
+  },
+  "evidenceModes": {
+    "sql": "Real isolated LocalDB, synthetic principals/data",
+    "liveWebAuthentication": "NOT_RUN",
+    "browser": "Synthetic API interception",
+    "http": "Test-assembly principals, static OIDC metadata and ephemeral certificate assertions"
+  },
+  "gates": {
+    "G7": "LOCAL_PARTIAL_NOT_DEVICE_CERTIFIED",
+    "G2": "DEFERRED_BY_USER_NOT_PASSED",
+    "G1": "PARTIAL from earlier MIP experiment",
+    "G6": "NOT_PASSED"
+  },
+  "tenantMutationsPerformed": false,
+  "cloudResourcesProvisioned": 0,
+  "deployed": false,
+  "protectedDownloadEnabled": false,
+  "ownerWebSetupProposal": "PRIVATE_PACKET_PREPARED_NOT_APPROVED"
+}

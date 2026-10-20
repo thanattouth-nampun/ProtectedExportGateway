@@ -1,5 +1,7 @@
 # Start here — Protected Export Gateway v4.3
 
+Latest access decision: [ADR-014 self-service Member workspaces](docs/member-self-service-workspace.md). All verified internal tenant Members get own private drafts without Publisher enrollment. This does not relax RMS-owner/scan/release gates. The human approved the exact Entra member-claim/enrollment changes and the new local artifact is active; fresh Member login/acceptance is tracked separately from the 183-test local checkpoint.
+
 Latest scope: [ADR-013 standalone owner-only source](docs/standalone-owner-only-mvp.md). Defer SharePoint/OneDrive/content connectors; retain Entra/MIP/Azure and both report/library modules. The owner controls a portal requester ACL independently from source RMS rights. New copies must retain the original RMS owner, plus exactly the verified requester as ordinary editor-profile recipient. Login alone never authorizes download.
 
 Next dependency is the guarded owner-only-source spike, not more Library screens. See [operator review packet](docs/owner-only-spike-runbook.md). Local preflight/rule tests are not live evidence. Existing unprotected parser/intake, service-owner snapshots and SQL Ready prohibition remain legacy fail-closed foundations until protected intake/ownership/scan/release are implemented and tested; the older descriptions below are superseded where they conflict.

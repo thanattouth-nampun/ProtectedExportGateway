@@ -54,6 +54,9 @@ public sealed class GatewayDbContext(DbContextOptions<GatewayDbContext> options)
         var audit = b.Entity<AuditEventRow>(); audit.ToTable("AuditEvents"); audit.HasKey(x => x.Id);
         audit.Property(x => x.EventType).HasMaxLength(80); audit.HasIndex(x => new { x.TenantId, x.At });
         audit.HasOne<ExportJobRow>().WithMany().HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.NoAction);
+        audit.HasOne<DocumentRow>().WithMany().HasForeignKey(x=>new {x.DocumentId,x.TenantId})
+            .HasPrincipalKey(x=>new {x.Id,x.TenantId}).OnDelete(DeleteBehavior.NoAction);
+        audit.HasIndex(x=>new {x.TenantId,x.DocumentId,x.At});
     }
 }
 

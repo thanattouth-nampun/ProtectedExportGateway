@@ -1,5 +1,7 @@
 # 07 — Implementation backlog and delivery gates v4.2
 
+> 20 October ADR-014: [Member self-service workspace](member-self-service-workspace.md) supersedes Publisher-only/pre-enrolled-owner access for private empty drafts. Every tenant Member has an own workspace; source ownership/recipient review/G1/G2/G6/release and report/auditor controls remain. The human subsequently approved the two exact tenant changes; rollout and live acceptance are tracked separately in ADR-014.
+
 > ADR-013 update (19 October 2026): [Standalone owner-only MVP](standalone-owner-only-mvp.md) supersedes conflicting unprotected-library-source/service-owned-output assumptions below. External content connectors are deferred; Entra/MIP/Azure remain. Legacy library contracts below are implementation history until revised protected intake/owner mapping/G1/G2/G6 are proven. Report generation and all unaffected controls remain in scope.
 
 > Current decision v4.2 (19 October 2026): ADR-012 removes the 3D renderer. Use the searchable HTML list/detail workspace with React/TypeScript and .NET BFF. Historical 3D evidence is not a current deliverable. All functional, security, native SDK and Azure controls remain required.
@@ -49,6 +51,12 @@ ADR-013 execution update: first finish the standalone scope/guarded owner-only s
 T04–T08,T15, fake T16/T23/T25, T18 และ T22 ทำได้ระหว่างรอ tenant/scanner/subscription โดยไม่เปลี่ยน live gates เป็นผ่าน T09/T10 live release ต้องผ่าน SDK gates; live publish ต้องมี G6 evidence; T19 ต้องมี target/cost authorization ไม่มี subscription ไม่ควรหยุด independent repo work
 
 ## Milestones
+
+20 October ADR-014 live self-service milestone: approved optional acct ID-token claim and assignment-required=false setup was independently verified and local release activated. Actual A/B sign-ins created distinct private drafts; B had roles=[] and zero direct app assignments and could reload/update its own draft. Known cross-owner read/audit requests A->Owner and B->A returned DOCUMENT_NOT_FOUND (404 field). SQL confirms correct actors/owners and original Owner data unchanged. See evidence/2026-10-20-member-workspace-live.md. Symmetric mutation/guest/cache-edge coverage remains separately identified automated evidence. No protected intake/release gate changed; next T23/G6 work remains.
+
+20 October Reader checkpoint: A first encountered Entra Need admin approval. The human then selected and approved tenant-wide consent limited to this app's openid/profile. The new grant was created/read back with assignment-required/roles/Owner consent preserved; the old A-only proposal was never executed. Actual A login, Reader-only session, direct Owner UI/list/known-draft API denial and local session denial after logout passed. Automatic Microsoft post-logout return was not observed. See reader-login-consent-runbook.md. Protected intake/release gates remain unchanged.
+
+20 October T07/T22 metadata checkpoint: own private Draft/ACL APIs and React forms, reviewed same-tenant identity directory, rowversion concurrency and transactional document-bound audit are implemented/tested. See owner-workspace-checkpoint.md and evidence/2026-10-20-owner-workspace.md. Subsequently approved separate web registration/certificate/role setup completed; actual Owner Entra login and browser-to-local-SQL create/update/remove/restore ACL checks succeeded on synthetic metadata (evidence/2026-10-20-owner-web-live-setup.md). A's Reader/session/Owner-denial checks subsequently passed as above. This is not complete T07/T22: source RMS-owner verification/intake and publish/withdraw remain pending. No source or downloadable artifact is enabled.
 
 20 October simplified milestone accepted by the user: one A copy matches an Excel-created Restricted Editor reference, retains the original owner and label, and the user-supplied Excel screenshot shows A under Restricted Editor and the original owner under Owner. The user explicitly deferred recipient open/edit/save/cross-copy testing. See evidence/2026-10-20-excel-reference-comparison.md. This acceptance is for the simplified experiment only; G1 remains partial and G2/G6 remain unpassed.
 

@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-20",
+  "approval": "Human approved exact separate local web identity and current-user localhost trust packet",
+  "tenantSetup": "VERIFIED_SETUP",
+  "webClientId": "a834c776-387c-43aa-8d55-3ab62a08acf6",
+  "cloudResourcesProvisioned": 0,
+  "deployed": false,
+  "localMigrationsApplied": 4,
+  "liveChecks": {
+    "ownerEntraLogin": "PASS",
+    "ownerPublisherDraftCreate": "PASS",
+    "ownerDraftMetadataUpdate": "PASS",
+    "draftReloadPersistence": "PASS",
+    "removeRequesterPersistedEmptyAcl": "PASS",
+    "restoreAOnlyAcl": "PASS",
+    "independentSqlAuditReadback": "PASS",
+    "aInteractiveLogin": "PASS_AFTER_APPROVED_TENANT_OIDC_CONSENT",
+    "aOwnerWorkspaceUiDenial": "PASS",
+    "aOwnerListAndKnownDraftApiDenial": "PASS_ACCESS_DENIED_BODY_OBSERVED",
+    "interactiveLogoutIdentityBoundary": "PASS_LOCAL_SESSION_DENIAL_AND_NO_DRAFT_DISPLAY",
+    "automaticPostLogoutCallbackReturn": "NOT_OBSERVED"
+  },
+  "syntheticDraft": {
+    "id": "c1f8fbe7-e1c1-420a-86a5-1f867219266d",
+    "revision": 4,
+    "aclRevision": 3,
+    "aclCount": 1,
+    "sourceVersionCount": 0,
+    "publishedVersion": null,
+    "auditEventCount": 4
+  },
+  "evidenceMode": "Real Entra session and local SQL operations on synthetic metadata; no test principal or intercepted API",
+  "exportExecutionMode": "Simulated",
+  "auditMode": 0,
+  "webOidcConsent": {
+    "status": "APPROVED_CREATED_AND_READBACK_VERIFIED",
+    "consentType": "AllPrincipals",
+    "scopes": ["openid", "profile"],
+    "assignmentRequiredUnchanged": true,
+    "existingAssignmentsUnchanged": true,
+    "ownerConsentPreserved": true,
+    "aOnlyProposalExecuted": false
+  },
+  "protectedDownloadEnabled": false,
+  "gates": { "G1": "PARTIAL", "G2": "DEFERRED_NOT_PASSED", "G6": "NOT_PASSED" }
+}

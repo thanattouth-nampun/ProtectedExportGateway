@@ -37,6 +37,12 @@ namespace Gateway.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CorrelationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long?>("DocumentRevision")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("EventType")
                         .IsRequired()
                         .HasMaxLength(80)
@@ -55,7 +61,11 @@ namespace Gateway.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("JobId");
 
+                    b.HasIndex("DocumentId", "TenantId");
+
                     b.HasIndex("TenantId", "At");
+
+                    b.HasIndex("TenantId", "DocumentId", "At");
 
                     b.ToTable("AuditEvents", (string)null);
                 });
@@ -322,6 +332,12 @@ namespace Gateway.Infrastructure.Persistence.Migrations
                     b.HasOne("Gateway.Infrastructure.Persistence.ExportJobRow", null)
                         .WithMany()
                         .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Gateway.Infrastructure.Persistence.DocumentRow", null)
+                        .WithMany()
+                        .HasForeignKey("DocumentId", "TenantId")
+                        .HasPrincipalKey("Id", "TenantId")
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 

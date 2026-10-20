@@ -10,8 +10,9 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
   }
   return response.json() as Promise<T>;
 }
-export async function mutate<T>(path: string, body: unknown, signal?: AbortSignal): Promise<T> {
+export async function mutate<T>(path: string, body: unknown, signal?: AbortSignal, options: { method?: 'POST' | 'PATCH'; etag?: string } = {}): Promise<T> {
   const { token } = await request<{ token: string }>('/auth/csrf', { signal });
-  return request<T>(path, { method: 'POST', signal, headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token,
+  return request<T>(path, { method: options.method ?? 'POST', signal, headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token,
+    ...(options.etag ? { 'If-Match': options.etag } : {}),
     'Idempotency-Key': crypto.randomUUID() }, body: JSON.stringify(body) });
 }

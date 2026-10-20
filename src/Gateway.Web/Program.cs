@@ -9,11 +9,18 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
+var localConfig=Environment.GetEnvironmentVariable("GATEWAY_LOCAL_CONFIG");
+if (!string.IsNullOrWhiteSpace(localConfig))
+{
+    if (!builder.Environment.IsDevelopment()) throw new InvalidOperationException("Local configuration files are development-only.");
+    builder.Configuration.AddJsonFile(Path.GetFullPath(localConfig),optional:false,reloadOnChange:false).AddEnvironmentVariables();
+}
 if (builder.Configuration["Gateway:Mode"] is { } mode && mode != "Simulated")
     throw new InvalidOperationException("LiveMip is unavailable until G1/G2 and durable release integration pass.");
 builder.Logging.AddFilter("Microsoft.AspNetCore.Authentication", LogLevel.Warning);
 builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow);
 builder.Services.AddProblemDetails();
+builder.Services.Configure<RouteHandlerOptions>(o=>o.ThrowOnBadRequest=false);
 builder.Services.AddOpenApi();
 if (builder.Environment.IsDevelopment() && OperatingSystem.IsWindows())
 {
@@ -31,9 +38,14 @@ builder.Services.AddAntiforgery(o =>
 });
 var tenant = builder.Configuration["WebIdentity:TenantId"];
 var clientId = builder.Configuration["WebIdentity:ClientId"];
+var webCertificate=builder.Configuration["WebIdentity:CertificateThumbprint"];
+var webSecret=builder.Configuration["WebIdentity:ClientSecret"];
+if (!string.IsNullOrWhiteSpace(webCertificate) && !string.IsNullOrWhiteSpace(webSecret))
+    throw new InvalidOperationException("Configure only one web client credential.");
+var clientValid=Guid.TryParse(clientId,out var clientGuid);
 var configured = Guid.TryParse(tenant, out var tenantGuid) && tenantGuid != Guid.Empty
-    && Guid.TryParse(clientId, out var clientGuid) && clientGuid != Guid.Empty
-    && !string.IsNullOrWhiteSpace(builder.Configuration["WebIdentity:ClientSecret"]);
+    && clientValid && clientGuid != Guid.Empty
+    && (!string.IsNullOrWhiteSpace(webSecret) || !string.IsNullOrWhiteSpace(webCertificate));
 // Disabled until explicitly configured. No development persona/authentication backdoor.
 var auth = builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(o =>
@@ -46,7 +58,7 @@ var auth = builder.Services.AddAuthentication(CookieAuthenticationDefaults.Authe
         o.Events.OnValidatePrincipal = c =>
         {
             var tid = c.Principal?.FindFirstValue("tid"); var oid = c.Principal?.FindFirstValue("oid");
-            if (!Guid.TryParse(tid, out var actual) || actual != tenantGuid || !Guid.TryParse(oid, out _)) c.RejectPrincipal();
+            if (!Guid.TryParse(tid, out var actual) || actual != tenantGuid || !Guid.TryParse(oid, out var subject) || subject==Guid.Empty) c.RejectPrincipal();
             return Task.CompletedTask;
         };
     });
@@ -54,7 +66,7 @@ if (configured)
     auth.AddOpenIdConnect("Entra", o =>
     {
         o.Authority = $"https://login.microsoftonline.com/{tenantGuid:D}/v2.0";
-        o.ClientId = clientId; o.ClientSecret = builder.Configuration["WebIdentity:ClientSecret"];
+        o.ClientId = clientId; o.ClientSecret = webSecret;
         o.ResponseType = "code"; o.UsePkce = true; o.SaveTokens = false; o.MapInboundClaims = false;
         o.CallbackPath = "/auth/callback"; o.SignedOutCallbackPath = "/auth/signed-out";
         o.Scope.Clear(); o.Scope.Add("openid"); o.Scope.Add("profile");
@@ -62,24 +74,67 @@ if (configured)
         o.Events.OnTokenValidated = c =>
         {
             if (!Guid.TryParse(c.Principal?.FindFirstValue("tid"), out var actual) || actual != tenantGuid
-                || !Guid.TryParse(c.Principal?.FindFirstValue("oid"), out _)) c.Fail("TENANT_OR_IDENTITY_INVALID");
+                || !Guid.TryParse(c.Principal?.FindFirstValue("oid"), out var subject) || subject==Guid.Empty) c.Fail("TENANT_OR_IDENTITY_INVALID");
             return Task.CompletedTask;
         };
+        if (!string.IsNullOrWhiteSpace(webCertificate))
+            o.Events.OnAuthorizationCodeReceived=async c=>
+            {
+                var discovery=c.Options.Configuration;
+                if (discovery is null && c.Options.ConfigurationManager is not null)
+                    discovery=await c.Options.ConfigurationManager.GetConfigurationAsync(c.HttpContext.RequestAborted);
+                var endpoint=discovery?.TokenEndpoint;
+                if (c.TokenEndpointRequest is null || endpoint is null) {c.Fail("WEB_TOKEN_ENDPOINT_UNAVAILABLE");return;}
+                c.TokenEndpointRequest.ClientSecret=null;
+                c.TokenEndpointRequest.ClientAssertionType="urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
+                c.TokenEndpointRequest.ClientAssertion=WebClientAssertion.FromStore(tenantGuid,clientGuid,endpoint,webCertificate);
+            };
     });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(o=>o.AddPolicy("InternalWorkspaceMember",p=>p.RequireAuthenticatedUser()
+    .RequireAssertion(c=>MemberWorkspaceAccess.IsAllowed(c.User,tenantGuid))));
+builder.AddOwnerWorkspace(tenantGuid);
 var app = builder.Build();
 app.UseExceptionHandler();
+app.UseStatusCodePages(async status=>
+{
+    var ctx=status.HttpContext;
+    if (ctx.Request.Path.StartsWithSegments("/api") || ctx.Request.Path.StartsWithSegments("/auth"))
+        await Results.Problem(statusCode:ctx.Response.StatusCode,title:"Request could not be processed",
+            extensions:new Dictionary<string,object?> { ["code"]=ctx.Response.StatusCode==413?"REQUEST_TOO_LARGE":"REQUEST_INVALID" }).ExecuteAsync(ctx);
+});
 if (!app.Environment.IsDevelopment()) { app.UseHsts(); app.UseHttpsRedirection(); }
 app.Use(async (context, next) =>
 {
     context.Response.Headers.XContentTypeOptions = "nosniff";
     context.Response.Headers["Referrer-Policy"] = "no-referrer";
-    context.Response.Headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
+    context.Response.Headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://login.microsoftonline.com";
     if (context.Request.Path.StartsWithSegments("/api") || context.Request.Path.StartsWithSegments("/auth"))
         context.Response.Headers.CacheControl = "no-store";
     await next();
 });
 app.UseAuthentication(); app.UseAuthorization();
+app.Use(async (context,next)=>
+{
+    var metadataWrite=(HttpMethods.IsPost(context.Request.Method) && string.Equals(context.Request.Path.Value?.TrimEnd('/'),"/api/documents",StringComparison.OrdinalIgnoreCase))
+        || (HttpMethods.IsPatch(context.Request.Method) && context.Request.Path.StartsWithSegments("/api/documents"));
+    if (metadataWrite)
+    {
+        const long limit=16*1024;
+        var bodyLimit=context.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpMaxRequestBodySizeFeature>();
+        if (bodyLimit is {IsReadOnly:false}) bodyLimit.MaxRequestBodySize=limit; // Also bounds chunked bodies on Kestrel.
+        if (context.Request.ContentLength>limit)
+        {
+            await Results.Problem(statusCode:413,title:"Metadata request is too large",
+                extensions:new Dictionary<string,object?> {["code"]="REQUEST_TOO_LARGE"}).ExecuteAsync(context); return;
+        }
+        var original=context.Request.Body;
+        using var bounded=new MetadataBodyLimitStream(original,limit);
+        context.Request.Body=bounded;
+        try {await next();} finally {context.Request.Body=original;}
+        return;
+    }
+    await next();
+});
 // Validate ALL unsafe API/auth methods, including unknown routes and logout.
 app.Use(async (context, next) =>
 {
@@ -104,13 +159,15 @@ app.MapGet("/auth/login", (string? returnUrl) =>
     return Results.Challenge(new AuthenticationProperties { RedirectUri = destination }, ["Entra"]);
 });
 app.MapGet("/auth/session", (ClaimsPrincipal user) => new SessionDto(user.FindFirstValue("tid")!, user.FindFirstValue("oid")!,
-    user.FindFirstValue("name") ?? "Signed-in user", user.FindAll("roles").Select(c => c.Value).Order().ToArray(), "Simulated")).RequireAuthorization();
+    user.FindFirstValue("name") ?? "Signed-in user", user.FindAll("roles").Select(c => c.Value).Order().ToArray(), "Simulated",
+    MemberWorkspaceAccess.IsAllowed(user,tenantGuid))).RequireAuthorization();
 app.MapGet("/auth/csrf", (HttpContext ctx, IAntiforgery csrf) => new CsrfDto(csrf.GetAndStoreTokens(ctx).RequestToken!)).RequireAuthorization();
 app.MapPost("/auth/logout", () => configured
     ? Results.SignOut(new AuthenticationProperties { RedirectUri = "/sign-in" }, [CookieAuthenticationDefaults.AuthenticationScheme, "Entra"])
     : Results.SignOut(new AuthenticationProperties { RedirectUri = "/sign-in" }, [CookieAuthenticationDefaults.AuthenticationScheme])).RequireAuthorization();
 // Explicitly unavailable rather than inventing published sources or in-memory durable jobs.
-app.MapGet("/api/documents", () => Results.Problem(statusCode: 503, title: "Document store not configured")).Produces<DocumentPageDto>().RequireAuthorization();
+app.MapGet("/api/documents", () => Results.Problem(statusCode: 503, title: "Published documents are not available yet")).Produces<DocumentPageDto>().RequireAuthorization();
+app.MapOwnerWorkspace();
 app.MapGet("/api/exports/{id}/download", (string id) => Results.Problem(statusCode: 409, title: "Simulated mode has no downloadable artifacts")).RequireAuthorization();
 app.MapMethods("/api/{**path}", ["GET", "HEAD", "POST", "PATCH", "PUT", "DELETE"], () => Results.Problem(statusCode: 404, title: "API route not implemented"));
 app.MapMethods("/auth/{**path}", ["GET", "HEAD", "POST", "PATCH", "PUT", "DELETE"], () => Results.Problem(statusCode: 404, title: "Authentication route not found"));

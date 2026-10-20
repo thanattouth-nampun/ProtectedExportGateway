@@ -5,6 +5,7 @@ import { request, mutate } from './api';
 import { Workspace } from '../features/library/Workspace';
 import type { LibraryPage } from '../features/library/model';
 import type { components } from '../contracts/api';
+import { OwnerDocuments } from '../features/owner/OwnerDocuments';
 
 type Session = components['schemas']['SessionDto'];
 export function App() {
@@ -28,8 +29,8 @@ export function App() {
   if (checking) return <main className="sign-in"><p role="status">Checking your session…</p></main>;
   if (!session) return <main className="sign-in"><p className="eyebrow">PROTECTED EXPORT GATEWAY</p><h1>A copy of your own.</h1>
     <p>{error}</p><p>Use your organization's Microsoft Entra account to continue.</p><a className="primary button-link" href="/auth/login?returnUrl=/library">Sign in with Microsoft</a>
-    <div className="info-note">This implementation has no live MIP or scanner evidence yet. Simulated jobs cannot release files.</div></main>;
-  const identity = JSON.stringify([session.tenantId, session.objectId, [...session.roles].sort()]);
+    <div className="info-note">Publishing and downloads are not available yet.</div></main>;
+  const identity = JSON.stringify([session.tenantId, session.objectId, [...session.roles].sort(), session.canManageOwnDocuments]);
   return <AuthorizedApp key={identity} session={session} clearSession={() => setSession(null)}/>;
 }
 function AuthorizedApp({ session, clearSession }: { session: Session; clearSession: () => void }) {
@@ -46,15 +47,15 @@ function AuthorizedApp({ session, clearSession }: { session: Session; clearSessi
   return <QueryClientProvider client={client}><div className="app-shell"><a className="skip-link" href="#main">Skip to content</a>
     <aside className="sidebar"><Link className="brand" to="/library"><span className="brand-symbol">▱</span><span>Protected Export<small>GATEWAY</small></span></Link>
       <p className="nav-label">WORKSPACE</p><nav aria-label="Main navigation">
-        {session.roles.includes('LibraryReader') && <NavLink to="/library">▦ <span>Document library</span></NavLink>}
-        {session.roles.includes('DocumentPublisher') && <NavLink to="/my-documents">▤ <span>My documents</span></NavLink>}
+        {(session.canManageOwnDocuments || session.roles.includes('LibraryReader')) && <NavLink to="/library">▦ <span>Shared with me</span></NavLink>}
+        {session.canManageOwnDocuments && <NavLink to="/my-documents">▤ <span>My documents</span></NavLink>}
         {(session.roles.includes('ReportReader') || session.roles.includes('PayrollExporter')) && <NavLink to="/reports">▥ <span>Reports</span></NavLink>}
         <NavLink to="/my-exports">↓ <span>My downloads</span></NavLink>
         {session.roles.includes('ExportAuditor') && <NavLink to="/audit">◷ <span>Audit log</span></NavLink>}
       </nav><div className="sidebar-note"><span>◈ {session.mode}</span><p>Downloads require verified live output.</p></div></aside>
     <div className="app-body"><header className="account-header"><span>Secure document workspace</span><div><span>{session.displayName}</span><button onClick={() => void logout()}>Sign out</button></div></header>
       <main id="main"><Routes><Route path="/library" element={<Library/>}/><Route path="/" element={<Navigate to="/library" replace/>}/>
-        <Route path="/my-documents" element={<Pending title="My documents" description="Owner upload, ACL, versions and publishing require the durable document and intake stores. No uploaded file can be published before trusted scanning and structural validation."/>}/>
+        <Route path="/my-documents" element={<OwnerDocuments allowed={session.canManageOwnDocuments}/>}/>
         <Route path="/reports" element={<Pending title="Reports" description="Synthetic headcount and payroll exports will use server-owned classification rules. Live protection and download are blocked until the SDK gates pass."/>}/>
         <Route path="/my-exports" element={<Pending title="My downloads" description="Durable job history is not connected yet. Simulated processing does not produce a downloadable artifact."/>}/>
         <Route path="/audit" element={<Pending title="Audit log" description="The transactional metadata journal is not connected yet. Auditor access will not grant file download permissions."/>}/>
@@ -64,7 +65,7 @@ function AuthorizedApp({ session, clearSession }: { session: Session; clearSessi
 function Library() {
   const query = useQuery({ queryKey: ['documents'], queryFn: ({ signal }) => request<LibraryPage>('/api/documents', { signal }) });
   if (query.isPending) return <p role="status">Loading authorized documents…</p>;
-  if (query.isError) return <section><h1>Document library</h1><p role="alert">The document store is unavailable. No source or copy can be downloaded.</p><button onClick={() => void query.refetch()}>Retry</button></section>;
+  if (query.isError) return <section><h1>Shared with me</h1><p role="alert">Shared documents are not available yet. No source or copy can be downloaded.</p><button onClick={() => void query.refetch()}>Retry</button></section>;
   return <Workspace documents={query.data.items} requestCopy={async d => { await mutate(`/api/documents/${encodeURIComponent(d.id)}/copies`, { sourceVersion: d.version }); }}/>;
 }
 function Pending({ title, description }: { title: string; description: string }) { return <section className="pending"><p className="eyebrow">IMPLEMENTATION IN PROGRESS</p><h1>{title}</h1><p>{description}</p></section>; }

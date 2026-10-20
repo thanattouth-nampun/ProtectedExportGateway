@@ -18,6 +18,7 @@ public sealed class BffFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Development");
+        builder.UseSetting("WebIdentity:TenantId","11111111-1111-1111-1111-111111111111");
         builder.ConfigureServices(services =>
         {
             services.AddDataProtection().UseEphemeralDataProtectionProvider();
@@ -33,8 +34,12 @@ public sealed class TestIdentity(IOptionsMonitor<AuthenticationSchemeOptions> op
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         if (!Request.Headers.ContainsKey("Test-Identity")) return Task.FromResult(AuthenticateResult.NoResult());
-        var identity = new ClaimsIdentity(new[] { new Claim("tid", "11111111-1111-1111-1111-111111111111"),
-            new Claim("oid", "22222222-2222-2222-2222-222222222222"), new Claim("name", "Test requester"), new Claim("roles", "LibraryReader") }, Scheme.Name);
+        var persona=Request.Headers["Test-Identity"].ToString();
+        var identity = new ClaimsIdentity(new[] { new Claim("tid", persona=="ForeignPublisher"?"99999999-9999-9999-9999-999999999999":"11111111-1111-1111-1111-111111111111"),
+            new Claim("oid", persona=="A"?"33333333-3333-4333-8333-333333333333":"22222222-2222-2222-2222-222222222222"), new Claim("name", "Test requester"),
+            new Claim("roles", persona is "Publisher" or "ForeignPublisher" ? "DocumentPublisher":"LibraryReader") }, Scheme.Name,"name","roles");
+        if (persona!="MissingMemberClaim") identity.AddClaim(new Claim("acct",persona=="Guest"?"1":"0"));
+        if (persona=="DuplicateMemberClaim") identity.AddClaim(new Claim("acct","1"));
         return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(identity), Scheme.Name)));
     }
 }

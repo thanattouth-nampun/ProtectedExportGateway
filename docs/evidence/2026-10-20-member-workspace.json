@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-20",
+  "decision": "ADR-014 self-service workspace for configured tenant Members",
+  "checks": { "unitPassed": 101, "httpPassed": 37, "sqlPassed": 23, "frontendUnitPassed": 7, "browserPassed": 15, "totalPassed": 183, "skipped": 0 },
+  "membership": "Validated single acct=0, configured tid and nonempty oid; roles/email never substitute",
+  "evidenceModes": { "http": "Synthetic test-assembly principals", "sql": "Real isolated LocalDB with synthetic members", "browser": "Intercepted synthetic APIs", "liveSelfService": "NOT_RUN_PENDING_APPROVED_CLAIM_AND_ENROLLMENT_ROLLOUT" },
+  "recipientDirectory": "Bounded reviewed identities only; all-tenant picker not implemented",
+  "build": { "openApiGenerated": true, "frontendTypecheck": "PASS", "isolatedSameOriginPackage": "PASS", "activated": false },
+  "tenantMutationsPerformed": false,
+  "actualOwnerDatabaseMigrated": false,
+  "cloudResourcesProvisioned": 0,
+  "deployed": false,
+  "protectedUploadEnabled": false,
+  "protectedDownloadEnabled": false,
+  "gates": { "G1": "PARTIAL", "G2": "DEFERRED_NOT_PASSED", "G6": "NOT_PASSED" }
+}
