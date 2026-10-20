@@ -50,6 +50,10 @@ T04–T08,T15, fake T16/T23/T25, T18 และ T22 ทำได้ระหว�
 
 ## Milestones
 
+20 October simplified milestone accepted by the user: one A copy matches an Excel-created Restricted Editor reference, retains the original owner and label, and the user-supplied Excel screenshot shows A under Restricted Editor and the original owner under Owner. The user explicitly deferred recipient open/edit/save/cross-copy testing. See evidence/2026-10-20-excel-reference-comparison.md. This acceptance is for the simplified experiment only; G1 remains partial and G2/G6 remain unpassed.
+
+20 October diagnostic checkpoint: the user narrowed the immediate experiment to one Restricted Editor candidate for A. Actual certificate app-only policy/RMS authentication, owner-only source inspection, owner-preserving reprotection and fresh exact recipient/rights readback matched. See evidence/2026-10-20-restricted-editor-probe.md. This does not pass G1/G2/G6 or change production release rights; Office UI/access/saved-copy tests remain required.
+
 ### M0 — Feasibility demonstrated
 
 G0/G1/G2 ผ่านทั้ง report/UDP paths มี tool ที่ทำซ้ำได้, versions, limited rights/ownership model, recipient inspection semantics และ client evidence ถ้าไม่ผ่าน ให้ report blocker พร้อม next proving check ก่อนขยายงาน live

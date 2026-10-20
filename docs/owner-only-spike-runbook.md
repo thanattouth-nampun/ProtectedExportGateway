@@ -1,6 +1,6 @@
 # Owner-only source spike — review packet, not execution authorization
 
-Read-only target-tenant Graph/ARM metadata inspection has now been performed. No live MIP run, tenant write, certificate enrollment, admin consent, provisioning or deployment has been performed. The exact local setup proposal is in ignored `.runtime/owner-only-inventory/change-request.md` with JSON scope/payload beside it. Do not send private keys, passwords, tokens or SDK caches through chat.
+Current evidence: approved processor directory setup completed on 19 October; the user-authorized one-recipient Restricted Editor local probe ran on 20 October with matching SDK apply/inspect observations. See evidence/2026-10-20-restricted-editor-probe.md. G1 remains partial and G2/G6 untested. No Azure provisioning/deployment or portal artifact release. Exact target/config and artifacts remain ignored; never send keys, passwords, tokens or SDK caches through chat.
 
 ## Target worksheet
 
@@ -33,6 +33,10 @@ If app registration, certificate binding, permission grants/admin consent or ten
 Rollback of approved local experiment: stop tool/native process, preserve redacted observations and hashes, verify source hash unchanged; delete only that exact private run directory after handles close and paths are verified. Review local certificate/app grant changes separately if they were approved, recording before/after IDs and removing only those changes. Revoking application permissions affects future service use; it does not recall copies already issued. RMS licenses/caches and audit records may persist. Directory removal is not secure physical erasure.
 
 ## Commands after approval and private setup
+
+20 October reference correction: the supplied Excel Restricted Editor reference contained A -> VIEW/DOCEDIT/EDIT plus original owner -> OWNER. Set `MatchExcelReferenceProfile=true` only with the single-recipient diagnostic mode to issue that exact observed profile. See evidence/2026-10-20-excel-reference-comparison.md. The earlier seven-right candidate remains historical; it did not render as Restricted Editor in the reported Excel dialog. Read-only `compare-protection <private-auth-config> <private-hash-manifest>` inspects exactly two bounded XLSX files with aliases sdk-copy/excel-reference, read locks and pinned hashes; it has no label/protection/commit or plaintext-output operations. It still performs authorized SDK authentication/consumption and is not an offline check or gate pass.
+
+Single-copy diagnostic option: set `SingleRecipientRestrictedEditorProbe=true`, `ExpectedSourceLabelName` to the reviewed UDP child name, RecipientB empty, and RecipientA to the verified test mapping. A pinned UdpId is preferred; an empty ID permits SDK-only discovery on the hash-pinned input, with exact expected name/active UDP and owner-only checks. This mode issues only A, uses the separate seven-right profile documented in the 20 October evidence, preserves the existing label assignment without reapplying Standard, and does not alter production release rules. The user's one-copy experiment authorization does not authorize a later two-copy or portal release run.
 
 Copy `tools/MipFeasibility/owner-only.config.example.json` to a private `owner-only.local.json` outside tracked source; fill locally. Do not commit config values, private runtime files or original protected content.
 

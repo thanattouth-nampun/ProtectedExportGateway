@@ -124,9 +124,14 @@ internal static class LiveSpike
 }
 internal sealed class ScopedConsent(string[] hosts) : IConsentDelegate
 {
-    public Consent GetUserConsent(string url) => Uri.TryCreate(url, UriKind.Absolute, out var uri)
+    public Consent GetUserConsent(string url)
+    {
+        var accepted = Uri.TryCreate(url, UriKind.Absolute, out var uri)
         && uri.Scheme == "https" && uri.IsDefaultPort && string.IsNullOrEmpty(uri.UserInfo)
-        && hosts.Contains(uri.Host, StringComparer.OrdinalIgnoreCase) ? Consent.Accept : Consent.Reject;
+        && hosts.Contains(uri.Host, StringComparer.OrdinalIgnoreCase);
+        Console.Error.WriteLine(JsonSerializer.Serialize(new { check="sdk-consent",host=uri?.Host,accepted }));
+        return accepted ? Consent.Accept : Consent.Reject;
+    }
 }
 internal sealed class CertificateAuth : IAuthDelegate
 {
@@ -141,15 +146,33 @@ internal sealed class CertificateAuth : IAuthDelegate
     }
     public string AcquireToken(Identity identity, string authority, string resource, string claims)
     {
-        if (!Uri.TryCreate(authority, UriKind.Absolute, out var uri) || uri.Scheme != "https"
-            || uri.Host != "login.microsoftonline.com" || !uri.IsDefaultPort || uri.Query.Length != 0
-            || !string.IsNullOrEmpty(uri.UserInfo) || uri.AbsolutePath.Trim('/') != config.TenantId.ToString("D")
-            || !config.AllowedResources.Contains(resource, StringComparer.Ordinal)
+        try { return AcquireCheckedToken(identity,authority,resource,claims); }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine(JsonSerializer.Serialize(new { check="processor-auth-failure",category=e.GetType().Name,
+                code=e is MsalException msal ? msal.ErrorCode : e is InvalidOperationException && System.Text.RegularExpressions.Regex.IsMatch(e.Message,"^[A-Z_]{3,80}$") ? e.Message : null,
+                aadsts=System.Text.RegularExpressions.Regex.Match(e.Message,"AADSTS[0-9]{4,10}").Value }));
+            throw;
+        }
+    }
+    private string AcquireCheckedToken(Identity identity, string authority, string resource, string claims)
+    {
+        Console.Error.WriteLine(JsonSerializer.Serialize(new { check="sdk-auth-challenge",
+            authorityHost=Uri.TryCreate(authority,UriKind.Absolute,out var authorityUri)?authorityUri.Host:null,
+            authorityAccepted=MipAuthChallengePolicy.AcceptsAuthority(authority,config.TenantId),
+            resourceListed=MipAuthChallengePolicy.AcceptsResource(resource,config.AllowedResources),
+            resourceHost=Uri.TryCreate(resource,UriKind.Absolute,out var resourceUri)?resourceUri.Host:null }));
+        if (!MipAuthChallengePolicy.AcceptsAuthority(authority,config.TenantId)
+            || !MipAuthChallengePolicy.AcceptsResource(resource,config.AllowedResources)
             || !Uri.TryCreate(resource, UriKind.Absolute, out var res) || res.Scheme != "https"
-            || !res.IsDefaultPort || !string.IsNullOrEmpty(res.UserInfo) || res.Query.Length != 0)
+            || !res.IsDefaultPort || !string.IsNullOrEmpty(res.UserInfo) || res.Query.Length != 0 || res.Fragment.Length != 0)
             throw new InvalidOperationException("AUTH_CHALLENGE_NOT_ALLOWLISTED");
         var request = client.AcquireTokenForClient([resource.TrimEnd('/') + "/.default"]);
         if (!string.IsNullOrEmpty(claims)) request = request.WithClaims(claims);
-        return request.ExecuteAsync().GetAwaiter().GetResult().AccessToken;
+        var result = request.ExecuteAsync().GetAwaiter().GetResult();
+        if (!string.Equals(result.TenantId,config.TenantId.ToString("D"),StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("TOKEN_TENANT_MISMATCH");
+        Console.Error.WriteLine(JsonSerializer.Serialize(new { check="processor-token",tenantMatched=true,acquired=true }));
+        return result.AccessToken;
     }
 }

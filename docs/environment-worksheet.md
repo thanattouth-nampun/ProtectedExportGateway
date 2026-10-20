@@ -1,5 +1,7 @@
 # Environment worksheet — 19 October 2026
 
+20 October update: the explicitly requested one-recipient Restricted Editor probe acquired real app-only policy/RMS tokens and matched owner-preserving source/output rights inspection. See evidence/2026-10-20-restricted-editor-probe.md. Owner/A enabled Member records were verified; A has no assigned licenses. Office entitlement, UI/effective access and G2/G6 remain unproven. Earlier NOT_RUN statements below describe the 19 October checkpoint and are superseded only for this bounded experiment.
+
 ADR-013 update: standalone content intake; SharePoint/OneDrive connectors deferred. Protected source ownership, original-owner processor delegation and encrypted-content scan/validation are new live proving obligations; all remain unverified. See owner-only-spike-runbook.md for target fields and required approval. Local checks use only synthetic fixtures; no certificate lookup or tenant authentication was invoked for the owner-only path.
 
 Source of truth: current repository and the user's current instructions. No earlier chat history or memory was used.

@@ -1,0 +1,127 @@
+{
+  "officeUiOnNewCopy": "OBSERVED_USER_SUPPLIED_SCREENSHOT",
+  "gatePassed": false,
+  "status": "OBSERVED_NOT_GATE_PASS",
+  "observations": [
+    {
+      "phase": "before",
+      "alias": "sdk-copy",
+      "sha256": "C74ECBDCFC32EE7806432DC9C5F8CD34FA1E307532555966C6EACFCF24D95787",
+      "protectedState": true,
+      "ownerMatchesExpected": true,
+      "delegatedOwnerHasOwnerRight": true,
+      "labelMatchesPinned": true,
+      "roleGrantCount": 0,
+      "grants": [
+        {
+          "rights": [
+            "DOCEDIT",
+            "EDIT",
+            "FORWARD",
+            "REPLY",
+            "REPLYALL",
+            "VIEW",
+            "VIEWRIGHTSDATA"
+          ],
+          "subjects": [
+            "recipient-a"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "before",
+      "alias": "excel-reference",
+      "sha256": "C63CE2D08AB33270C04EF6383C33B1F5A8BA62DA0F3628E451BD410A5C5C1BA4",
+      "protectedState": true,
+      "ownerMatchesExpected": true,
+      "delegatedOwnerHasOwnerRight": true,
+      "labelMatchesPinned": true,
+      "roleGrantCount": 0,
+      "grants": [
+        {
+          "rights": [
+            "DOCEDIT",
+            "EDIT",
+            "VIEW"
+          ],
+          "subjects": [
+            "recipient-a"
+          ]
+        },
+        {
+          "rights": [
+            "OWNER"
+          ],
+          "subjects": [
+            "original-owner"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "alias": "sdk-copy",
+      "sha256": "4187DFF807DF8B83DE3A43445FAED6088197CE9581E7D386BF38228D9AE0EC41",
+      "protectedState": true,
+      "ownerMatchesExpected": true,
+      "delegatedOwnerHasOwnerRight": true,
+      "labelMatchesPinned": true,
+      "roleGrantCount": 0,
+      "grants": [
+        {
+          "rights": [
+            "DOCEDIT",
+            "EDIT",
+            "VIEW"
+          ],
+          "subjects": [
+            "recipient-a"
+          ]
+        },
+        {
+          "rights": [
+            "OWNER"
+          ],
+          "subjects": [
+            "original-owner"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "alias": "excel-reference",
+      "sha256": "C63CE2D08AB33270C04EF6383C33B1F5A8BA62DA0F3628E451BD410A5C5C1BA4",
+      "protectedState": true,
+      "ownerMatchesExpected": true,
+      "delegatedOwnerHasOwnerRight": true,
+      "labelMatchesPinned": true,
+      "roleGrantCount": 0,
+      "grants": [
+        {
+          "rights": [
+            "DOCEDIT",
+            "EDIT",
+            "VIEW"
+          ],
+          "subjects": [
+            "recipient-a"
+          ]
+        },
+        {
+          "rights": [
+            "OWNER"
+          ],
+          "subjects": [
+            "original-owner"
+          ]
+        }
+      ]
+    }
+  ],
+  "check": "excel-reference-comparison",
+  "filesUnchanged": true,
+  "simpleMilestoneAcceptedByUser": true,
+  "recipientBehaviorTestsDeferredByUser": true
+}

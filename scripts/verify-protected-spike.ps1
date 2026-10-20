@@ -52,5 +52,23 @@ Invoke-Preflight 2 'missing owner-delegation approval rejected'
 $taskConfig.OwnerDelegationApproved = $true
 $taskConfig['UnexpectedField'] = 'reject'
 Invoke-Preflight 2 'unknown configuration field rejected'
-Write-Host '5 offline preflight checks passed. No protected-source/live gate tested.'
+$taskConfig.Remove('UnexpectedField')
+$taskConfig['SingleRecipientRestrictedEditorProbe'] = $true
+$taskConfig['ExpectedSourceLabelName'] = 'Synthetic test label'
+$taskConfig.Processor.RecipientB = ''
+$taskConfig.Processor.UdpId = ''
+Invoke-Preflight 0 'single-recipient probe permits SDK-only source label discovery; no live inspection'
+$taskConfig.Processor.RecipientB = 'b@example.test'
+Invoke-Preflight 2 'single-recipient probe rejects a second recipient'
+$taskConfig.Processor.RecipientB = ''
+$taskConfig.ExpectedSourceLabelName = ''
+Invoke-Preflight 2 'single-recipient probe requires expected source label name'
+$taskConfig.ExpectedSourceLabelName = 'Synthetic test label'
+$taskConfig['MatchExcelReferenceProfile'] = $true
+Invoke-Preflight 0 'Excel-reference probe config remains an offline-only preflight'
+$taskConfig.SingleRecipientRestrictedEditorProbe = $false
+$taskConfig.Processor.RecipientB = 'b@example.test'
+$taskConfig.Processor.UdpId = [guid]::NewGuid().ToString()
+Invoke-Preflight 2 'Excel-reference profile cannot alter the legacy two-recipient mode'
+Write-Host '10 offline preflight checks passed. No protected-source/live gate tested.'
 $global:LASTEXITCODE = 0

@@ -1,0 +1,42 @@
+{
+  "gate": "G1-owner-only",
+  "status": "PARTIAL_NOT_PASSED",
+  "gatePassed": false,
+  "singleRecipientRestrictedEditorProbe": true,
+  "officePermissionDisplay": "NOT_TESTED",
+  "identityCandidate": "certificate-app-only/original-owner-engine-delegation",
+  "inputSha256": "24B7904375817C5AA033F6713D23ABE01BB52A79FD589138A0BE60463DA46235",
+  "sourceUnchanged": true,
+  "applyInspectMatched": true,
+  "results": [
+    {
+      "Alias": "copy-a",
+      "matched": true,
+      "outputSha256": "C74ECBDCFC32EE7806432DC9C5F8CD34FA1E307532555966C6EACFCF24D95787",
+      "independentHandler": true,
+      "distinctContentId": true,
+      "observedProtection": true,
+      "observedLabelMatches": true,
+      "observedOwnerMatches": true,
+      "observedUserGrantCount": 1,
+      "HasRoleGrants": false,
+      "observedRights": [
+        "DOCEDIT",
+        "EDIT",
+        "FORWARD",
+        "REPLY",
+        "REPLYALL",
+        "VIEW",
+        "VIEWRIGHTSDATA"
+      ],
+      "recipientMatches": true,
+      "semantics": "FileSDK-1.18.124/fresh-read-locked-handler/ProtectionDescriptor.UserRights"
+    }
+  ],
+  "pending": [
+    "Independent owner/A/B/unauthorized-C Office tests, including saved copies",
+    "Cold/warm policy and access-negative controls",
+    "G6 encrypted-source content scan and bounded structural validation",
+    "Exact Blob version binding and fenced release"
+  ]
+}
