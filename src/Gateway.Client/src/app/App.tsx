@@ -30,7 +30,7 @@ export function App() {
   if (!session) return <main className="sign-in"><p className="eyebrow">PROTECTED EXPORT GATEWAY</p><h1>A copy of your own.</h1>
     <p>{error}</p><p>Use your organization's Microsoft Entra account to continue.</p><a className="primary button-link" href="/auth/login?returnUrl=/library">Sign in with Microsoft</a>
     <div className="info-note">Publishing and downloads are not available yet.</div></main>;
-  const identity = JSON.stringify([session.tenantId, session.objectId, [...session.roles].sort(), session.canManageOwnDocuments]);
+  const identity = JSON.stringify([session.tenantId, session.objectId, [...session.roles].sort(), session.canManageOwnDocuments, session.canUploadToLocalQuarantine]);
   return <AuthorizedApp key={identity} session={session} clearSession={() => setSession(null)}/>;
 }
 function AuthorizedApp({ session, clearSession }: { session: Session; clearSession: () => void }) {
@@ -55,7 +55,7 @@ function AuthorizedApp({ session, clearSession }: { session: Session; clearSessi
       </nav><div className="sidebar-note"><span>◈ {session.mode}</span><p>Downloads require verified live output.</p></div></aside>
     <div className="app-body"><header className="account-header"><span>Secure document workspace</span><div><span>{session.displayName}</span><button onClick={() => void logout()}>Sign out</button></div></header>
       <main id="main"><Routes><Route path="/library" element={<Library/>}/><Route path="/" element={<Navigate to="/library" replace/>}/>
-        <Route path="/my-documents" element={<OwnerDocuments allowed={session.canManageOwnDocuments}/>}/>
+        <Route path="/my-documents" element={<OwnerDocuments allowed={session.canManageOwnDocuments} uploadAllowed={session.canUploadToLocalQuarantine}/>}/>
         <Route path="/reports" element={<Pending title="Reports" description="Synthetic headcount and payroll exports will use server-owned classification rules. Live protection and download are blocked until the SDK gates pass."/>}/>
         <Route path="/my-exports" element={<Pending title="My downloads" description="Durable job history is not connected yet. Simulated processing does not produce a downloadable artifact."/>}/>
         <Route path="/audit" element={<Pending title="Audit log" description="The transactional metadata journal is not connected yet. Auditor access will not grant file download permissions."/>}/>

@@ -1,5 +1,7 @@
 # 12 — Owner upload, document lifecycle and publishing v3
 
+21 October implementation note: [local quarantine checkpoint](quarantine-upload-checkpoint.md) uses one bounded raw octet-stream body (no multipart temp buffering), explicit synthetic acknowledgment and a private Windows-only local store. It is a guarded receipt spike; extension/MIME are hints and ownership/protection/scan/OOXML inspection is unknown. It does not satisfy protected intake/G6 or the Azure Blob binding/production requirements below. Local receipt rows cannot become Eligible or carry source/scan/validation evidence; published/legacy-source replacement remains blocked.
+
 > ADR-014 access update (20 October 2026): [Self-service Member workspaces](member-self-service-workspace.md) supersedes Publisher-only/pre-enrolled-owner empty-draft access below. Every verified internal tenant Member gets own private drafts; source RMS-owner mapping, reviewed recipients, scan/release and report/auditor controls remain. Approved tenant claim/enrollment rollout and live acceptance are tracked separately in ADR-014.
 
 > ADR-013 update (19 October 2026): [Standalone owner-only MVP](standalone-owner-only-mvp.md) supersedes conflicting unprotected-library-source/service-owned-output assumptions below. External content connectors are deferred; Entra/MIP/Azure remain. Legacy library contracts below are implementation history until revised protected intake/owner mapping/G1/G2/G6 are proven. Report generation and all unaffected controls remain in scope.

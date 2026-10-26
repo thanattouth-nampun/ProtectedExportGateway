@@ -65,7 +65,7 @@ public sealed class QueueTests : IAsyncLifetime
         await db.GetService<IMigrator>().MigrateAsync("0");
         Assert.Empty(await db.Database.GetAppliedMigrationsAsync());
         await db.Database.MigrateAsync();
-        Assert.Equal(4,(await db.Database.GetAppliedMigrationsAsync()).Count());
+        Assert.Equal(5,(await db.Database.GetAppliedMigrationsAsync()).Count());
         Assert.Equal(0,await db.ExportJobs.CountAsync());
     }
     [Fact] public async Task Changed_payload_conflicts_and_same_key_other_requester_or_tenant_is_isolated()

@@ -154,6 +154,17 @@ namespace Gateway.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("DocumentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<long?>("QuarantineBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("QuarantineSha256")
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<Guid?>("QuarantineToken")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
@@ -172,6 +183,19 @@ namespace Gateway.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("UploadAttempts")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UploadErrorCode")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<Guid?>("UploadKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UploadLeaseUntil")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<DateTimeOffset>("UploadedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -185,7 +209,14 @@ namespace Gateway.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("DocumentId", "TenantId");
 
-                    b.ToTable("DocumentVersions", (string)null);
+                    b.HasIndex("TenantId", "UploaderOid", "DocumentId", "UploadKey")
+                        .IsUnique()
+                        .HasFilter("[UploadKey] IS NOT NULL");
+
+                    b.ToTable("DocumentVersions", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_DocumentVersions_Quarantine", "[UploadKey] IS NULL OR ([UploadAttempts] BETWEEN 1 AND 3 AND [QuarantineToken] IS NOT NULL AND [State] IN (0,1,6) AND [SourceBindingJson] IS NULL AND [ScanEvidenceJson] IS NULL AND [ValidationEvidenceJson] IS NULL AND (([State]=0 AND [UploadLeaseUntil] IS NOT NULL) OR ([State]<>0 AND [UploadLeaseUntil] IS NULL)) AND ([State] <> 1 OR ([QuarantineBytes] IS NOT NULL AND [QuarantineBytes] BETWEEN 1 AND 10485760 AND [QuarantineSha256] IS NOT NULL AND LEN([QuarantineSha256])=64)))");
+                        });
                 });
 
             modelBuilder.Entity("Gateway.Infrastructure.Persistence.ExportAttemptRow", b =>

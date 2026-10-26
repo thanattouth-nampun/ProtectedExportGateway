@@ -8,9 +8,9 @@ const draft = () => ({ id: documentId, title: 'Synthetic owner draft', purpose: 
 
 // Browser behavior uses intercepted synthetic API responses. This is not Entra/SQL/live-intake evidence.
 async function workspace(page: Page, existing = false) {
-  const state = { doc: draft(), exists: existing, conflict: false, persona: 'owner', mutations: [] as { method: string; headers: Record<string, string>; body: Record<string, unknown> }[] };
+  const state = { doc: draft(), exists: existing, conflict: false, persona: 'owner', uploadEnabled: false, mutations: [] as { method: string; headers: Record<string, string>; body: Record<string, unknown> }[] };
   await page.route('**/auth/session', route => route.fulfill({ json: { tenantId: 'test-tenant', objectId: state.persona === 'owner' ? owner : a,
-    displayName: state.persona === 'owner' ? 'Synthetic Owner' : 'Synthetic Reader', roles: state.persona === 'owner' ? ['DocumentPublisher'] : ['LibraryReader'], mode: 'Simulated', canManageOwnDocuments: state.persona !== 'guest' } }));
+    displayName: state.persona === 'owner' ? 'Synthetic Owner' : 'Synthetic Reader', roles: state.persona === 'owner' ? ['DocumentPublisher'] : ['LibraryReader'], mode: 'Simulated', canManageOwnDocuments: state.persona !== 'guest', canUploadToLocalQuarantine: state.uploadEnabled } }));
   await page.route('**/auth/csrf', route => route.fulfill({ json: { token: 'synthetic-csrf' } }));
   await page.route('**/api/document-requester-options', route => route.fulfill({ json: [{ objectId: owner, displayName: 'Synthetic Owner' }, { objectId: a, displayName: 'Synthetic A' }] }));
   await page.route('**/api/my/documents?*', route => route.fulfill({ json: { items: state.exists && state.persona === 'owner' ? [state.doc] : [], total: state.exists && state.persona === 'owner' ? 1 : 0, skip: 0, pageSize: 25 } }));
@@ -118,4 +118,48 @@ test('unconfirmed save blocks automatic duplicate submission and offers reload',
   await expect(page.getByRole('alert').filter({ hasText: 'could not be confirmed' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Save draft' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Reload workspace' })).toBeVisible();
+});
+
+test('quarantine upload requires explicit synthetic acknowledgment and shows pending inspection without release', async ({ page }) => {
+  const state = await workspace(page, true); state.uploadEnabled = true;
+  let received = false; let headers: Record<string, string> = {};
+  const version = { id: 'version', filename: 'synthetic.xlsx', state: 'AwaitingValidation', bytes: 4, sha256: 'A'.repeat(64), uploadedAt: '2026-10-21T08:00:00Z', errorCode: null, storageMode: 'LocalQuarantineSpike', canPublish: false };
+  await page.route('**/api/documents/*/uploads', async route => {
+    if (route.request().method() === 'GET') return route.fulfill({ json: received ? [version] : [] });
+    headers = route.request().headers(); received = true; return route.fulfill({ json: version });
+  });
+  await page.goto('/my-documents'); await page.getByRole('button', { name: /Synthetic owner draft/ }).click();
+  await expect(page.getByRole('button', { name: 'Upload to local quarantine' })).toBeDisabled();
+  await page.getByLabel('Workbook file', { exact: true }).setInputFiles({ name: 'synthetic.xlsx', mimeType: 'application/octet-stream', buffer: Buffer.from([1, 2, 3, 4]) });
+  await expect(page.getByRole('button', { name: 'Upload to local quarantine' })).toBeDisabled();
+  await page.getByRole('checkbox', { name: 'I confirm this workbook contains synthetic data only.' }).check();
+  await page.getByRole('button', { name: 'Upload to local quarantine' }).click();
+  await expect(page.getByText('File received: AwaitingValidation.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Ownership, content scan and structural validation: not verified. Publish blocked.')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Upload to local quarantine' })).toBeDisabled(); // A new version requires a fresh deliberate file selection.
+  expect(headers['if-match']).toBe('"revision-1"'); expect(headers['x-synthetic-fixture']).toBe('true');
+  expect(headers['content-type']).toBe('application/octet-stream'); expect(headers['x-csrf-token']).toBe('synthetic-csrf');
+  await expect(page.getByRole('button', { name: 'Publish', exact: true })).toBeDisabled();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/quarantine-mobile.png', fullPage: true });
+});
+
+test('unconfirmed upload retries selected bytes with the same idempotency key', async ({ page }) => {
+  const state = await workspace(page, true); state.uploadEnabled = true;
+  const keys: string[] = [];
+  await page.route('**/api/documents/*/uploads', async route => {
+    if (route.request().method() === 'GET') return route.fulfill({ json: [] });
+    keys.push(route.request().headers()['idempotency-key']); return route.fulfill({ status: 503, json: { code: 'UPLOAD_NOT_CONFIRMED_RELOAD_STATUS' } });
+  });
+  await page.goto('/my-documents'); await page.getByRole('button', { name: /Synthetic owner draft/ }).click();
+  await page.getByLabel('Workbook file', { exact: true }).setInputFiles({ name: 'synthetic.xlsx', mimeType: 'application/octet-stream', buffer: Buffer.from([1]) });
+  await page.getByRole('checkbox', { name: 'I confirm this workbook contains synthetic data only.' }).check();
+  await page.getByRole('button', { name: 'Upload to local quarantine' }).click();
+  await expect(page.getByText('Upload could not be confirmed.', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Refresh upload status' }).click();
+  await page.getByRole('button', { name: 'Upload to local quarantine' }).click();
+  await expect.poll(() => keys.length).toBe(2); expect(keys[0]).toBeTruthy(); expect(keys[0]).toBe(keys[1]);
+  state.persona = 'guest'; await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await expect(page.getByLabel('Workbook file', { exact: true })).toHaveCount(0);
 });

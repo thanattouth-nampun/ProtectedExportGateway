@@ -25,6 +25,13 @@ public sealed class DocumentVersionRow
     public Guid UploaderOid { get; set; }
     public string DisplayFilename { get; set; } = "";
     public IntakeState State { get; set; }
+    public Guid? UploadKey { get; set; }
+    public Guid? QuarantineToken { get; set; }
+    public string? QuarantineSha256 { get; set; }
+    public long? QuarantineBytes { get; set; }
+    public DateTimeOffset? UploadLeaseUntil { get; set; }
+    public int UploadAttempts { get; set; }
+    public string? UploadErrorCode { get; set; }
     public string? SourceBindingJson { get; set; }
     public string? ScanEvidenceJson { get; set; }
     public string? ValidationEvidenceJson { get; set; }

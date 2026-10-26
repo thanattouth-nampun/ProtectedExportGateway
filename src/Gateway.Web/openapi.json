@@ -536,6 +536,77 @@
           }
         }
       }
+    },
+    "/api/documents/{document}/uploads": {
+      "get": {
+        "tags": [
+          "Local quarantine spike"
+        ],
+        "parameters": [
+          {
+            "name": "document",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuarantineVersionView"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Local quarantine spike"
+        ],
+        "parameters": [
+          {
+            "name": "document",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "$ref": "#/components/schemas/Stream"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuarantineVersionView"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -781,6 +852,64 @@
         },
         "additionalProperties": false
       },
+      "QuarantineVersionView": {
+        "required": [
+          "id",
+          "filename",
+          "state",
+          "bytes",
+          "sha256",
+          "uploadedAt",
+          "errorCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "bytes": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
+          "sha256": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "uploadedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errorCode": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "storageMode": {
+            "type": "string",
+            "default": "LocalQuarantineSpike"
+          },
+          "canPublish": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      },
       "RequesterOptionDto": {
         "required": [
           "objectId",
@@ -805,7 +934,8 @@
           "displayName",
           "roles",
           "mode",
-          "canManageOwnDocuments"
+          "canManageOwnDocuments",
+          "canUploadToLocalQuarantine"
         ],
         "type": "object",
         "properties": {
@@ -829,9 +959,16 @@
           },
           "canManageOwnDocuments": {
             "type": "boolean"
+          },
+          "canUploadToLocalQuarantine": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
+      },
+      "Stream": {
+        "type": "string",
+        "format": "binary"
       }
     }
   },
@@ -841,6 +978,9 @@
     },
     {
       "name": "Own documents"
+    },
+    {
+      "name": "Local quarantine spike"
     }
   ]
 }

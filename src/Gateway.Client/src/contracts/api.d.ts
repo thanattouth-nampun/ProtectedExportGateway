@@ -939,6 +939,68 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/documents/{document}/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    document: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["QuarantineVersionView"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    document: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/octet-stream": components["schemas"]["Stream"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["QuarantineVersionView"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1000,6 +1062,22 @@ export interface components {
             sourceOwnershipStatus: string;
             canPublish: boolean;
         };
+        QuarantineVersionView: {
+            /** Format: uuid */
+            id: string;
+            filename: string;
+            state: string;
+            /** Format: int64 */
+            bytes: null | number | string;
+            sha256: null | string;
+            /** Format: date-time */
+            uploadedAt: string;
+            errorCode: null | string;
+            /** @default LocalQuarantineSpike */
+            storageMode: string;
+            /** @default false */
+            canPublish: boolean;
+        };
         RequesterOptionDto: {
             /** Format: uuid */
             objectId: string;
@@ -1012,7 +1090,10 @@ export interface components {
             roles: string[];
             mode: string;
             canManageOwnDocuments: boolean;
+            canUploadToLocalQuarantine: boolean;
         };
+        /** Format: binary */
+        Stream: string;
     };
     responses: never;
     parameters: never;

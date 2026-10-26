@@ -1,5 +1,7 @@
 # 07 — Implementation backlog and delivery gates v4.2
 
+26 October ownership checkpoint: read-only operator probe binds existing SQL receipt/hash/uploader to reviewed RMS mapping and fresh SDK readback. Actual B receipt returned RMS_OWNER_MISMATCH; no SQL eligibility/UI state change. 203 automated tests passed. See [runbook](quarantine-ownership-checkpoint.md) and [evidence](evidence/2026-10-26-quarantine-ownership.md). Positive owner upload, durable ownership evidence, T24 trusted scanner/helper, T25 protected inspection/promotion and final G6 remain incomplete.
+
 > 20 October ADR-014: [Member self-service workspace](member-self-service-workspace.md) supersedes Publisher-only/pre-enrolled-owner access for private empty drafts. Every tenant Member has an own workspace; source ownership/recipient review/G1/G2/G6/release and report/auditor controls remain. The human subsequently approved the two exact tenant changes; rollout and live acceptance are tracked separately in ADR-014.
 
 > ADR-013 update (19 October 2026): [Standalone owner-only MVP](standalone-owner-only-mvp.md) supersedes conflicting unprotected-library-source/service-owned-output assumptions below. External content connectors are deferred; Entra/MIP/Azure remain. Legacy library contracts below are implementation history until revised protected intake/owner mapping/G1/G2/G6 are proven. Report generation and all unaffected controls remain in scope.
@@ -51,6 +53,8 @@ ADR-013 execution update: first finish the standalone scope/guarded owner-only s
 T04–T08,T15, fake T16/T23/T25, T18 และ T22 ทำได้ระหว่างรอ tenant/scanner/subscription โดยไม่เปลี่ยน live gates เป็นผ่าน T09/T10 live release ต้องผ่าน SDK gates; live publish ต้องมี G6 evidence; T19 ต้องมี target/cost authorization ไม่มี subscription ไม่ควรหยุด independent repo work
 
 ## Milestones
+
+21 October T23 local receipt checkpoint: Development-only synthetic quarantine raw-stream API/UI, measured hash/size, durable SQL reservation/idempotency/lease fencing, bounded retries/maintenance and owner-scoped metadata implemented. 210 distinct local tests passed; actual Entra B browser receipt stored the supplied synthetic encrypted envelope with matching 45,568 bytes/hash, AwaitingValidation and no source/scan/validation/published binding. This does not establish uploader RMS ownership (the existing fixture belongs to the original Owner) or G6. Production intake stays default-off/unavailable. See quarantine-upload-checkpoint.md and evidence/2026-10-21-quarantine-upload.md for rollout/backup/limits. Next T24/T25 protected ownership/content inspection/scanner; Azure Blob integration and full I01–I16 still required.
 
 20 October ADR-014 live self-service milestone: approved optional acct ID-token claim and assignment-required=false setup was independently verified and local release activated. Actual A/B sign-ins created distinct private drafts; B had roles=[] and zero direct app assignments and could reload/update its own draft. Known cross-owner read/audit requests A->Owner and B->A returned DOCUMENT_NOT_FOUND (404 field). SQL confirms correct actors/owners and original Owner data unchanged. See evidence/2026-10-20-member-workspace-live.md. Symmetric mutation/guest/cache-edge coverage remains separately identified automated evidence. No protected intake/release gate changed; next T23/G6 work remains.
 

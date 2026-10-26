@@ -1,0 +1,11 @@
+{
+  "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=REVIEW_EXACT_LOCAL_DATABASE;Integrated Security=true;Encrypt=false",
+  "PrivateRoot": "REVIEW_ABSOLUTE_PRIVATE_QUARANTINE_ROOT",
+  "TenantId": "00000000-0000-0000-0000-000000000000",
+  "VersionId": "00000000-0000-0000-0000-000000000000",
+  "EncryptedSha256": "REVIEW_EXACT_ENCRYPTED_SHA256",
+  "ApprovedLabelId": "00000000-0000-0000-0000-000000000000",
+  "Identities": [],
+  "AuthorizationReference": "REVIEW_EXACT_TARGET_AND_READ_ONLY_PROCESSING_SCOPE",
+  "SyntheticFixtureAcknowledged": false
+}

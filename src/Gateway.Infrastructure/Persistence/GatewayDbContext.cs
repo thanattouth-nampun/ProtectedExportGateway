@@ -22,6 +22,11 @@ public sealed class GatewayDbContext(DbContextOptions<GatewayDbContext> options)
         var v = b.Entity<DocumentVersionRow>(); v.ToTable("DocumentVersions"); v.HasKey(x => x.Id);
         v.HasAlternateKey(x => new { x.Id, x.DocumentId, x.TenantId });
         v.Property(x => x.DisplayFilename).HasMaxLength(255); v.Property(x => x.RowVersion).IsRowVersion();
+        v.Property(x=>x.QuarantineSha256).HasMaxLength(64).IsUnicode(false);
+        v.Property(x=>x.UploadErrorCode).HasMaxLength(80);
+        v.HasIndex(x=>new {x.TenantId,x.UploaderOid,x.DocumentId,x.UploadKey}).IsUnique().HasFilter("[UploadKey] IS NOT NULL");
+        v.ToTable("DocumentVersions",t=>t.HasCheckConstraint("CK_DocumentVersions_Quarantine",
+            "[UploadKey] IS NULL OR ([UploadAttempts] BETWEEN 1 AND 3 AND [QuarantineToken] IS NOT NULL AND [State] IN (0,1,6) AND [SourceBindingJson] IS NULL AND [ScanEvidenceJson] IS NULL AND [ValidationEvidenceJson] IS NULL AND (([State]=0 AND [UploadLeaseUntil] IS NOT NULL) OR ([State]<>0 AND [UploadLeaseUntil] IS NULL)) AND ([State] <> 1 OR ([QuarantineBytes] IS NOT NULL AND [QuarantineBytes] BETWEEN 1 AND 10485760 AND [QuarantineSha256] IS NOT NULL AND LEN([QuarantineSha256])=64)))"));
         v.HasOne<DocumentRow>().WithMany().HasForeignKey(x => new { x.DocumentId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId }).OnDelete(DeleteBehavior.NoAction);
         d.HasOne<DocumentVersionRow>().WithMany().HasForeignKey(x => new { x.CurrentPublishedVersionId, x.Id, x.TenantId })

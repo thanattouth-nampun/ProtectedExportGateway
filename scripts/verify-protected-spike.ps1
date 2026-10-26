@@ -25,7 +25,7 @@ $taskConfig = [ordered]@{
     AuthorizationReference = 'OFFLINE-TEST-ONLY-NO-LIVE-AUTHORIZATION'
     SyntheticFixtureAcknowledged = $true; OwnerDelegationApproved = $true
 }
-dotnet build tools/MipFeasibility --no-restore
+dotnet build tools/MipFeasibility --no-restore --disable-build-servers -m:1
 if ($LASTEXITCODE -ne 0) { throw 'Spike build failed.' }
 $taskDll = Join-Path $repoRoot 'tools/MipFeasibility/bin/Debug/net10.0/MipFeasibility.dll'
 $taskConfigPath = Join-Path $taskRoot 'owner-only.local.json'
@@ -70,5 +70,25 @@ $taskConfig.SingleRecipientRestrictedEditorProbe = $false
 $taskConfig.Processor.RecipientB = 'b@example.test'
 $taskConfig.Processor.UdpId = [guid]::NewGuid().ToString()
 Invoke-Preflight 2 'Excel-reference profile cannot alter the legacy two-recipient mode'
-Write-Host '10 offline preflight checks passed. No protected-source/live gate tested.'
+$taskReceiptPath=Join-Path $taskRoot 'receipt.local.json'
+$taskReceipt=[ordered]@{
+    ConnectionString='Server=example.test;Database=NotUsed;Integrated Security=true'
+    PrivateRoot=$taskRun;TenantId=[guid]::NewGuid().ToString();VersionId=[guid]::NewGuid().ToString()
+    EncryptedSha256=$taskHash;ApprovedLabelId=[guid]::NewGuid().ToString();Identities=@()
+    AuthorizationReference='OFFLINE-TEST-ONLY';SyntheticFixtureAcknowledged=$false
+}
+function Invoke-ReceiptGuard($code,[string]$scenario) {
+    $taskReceipt | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $taskReceiptPath
+    $taskReceiptResult=& dotnet $taskDll quarantine-owner-preflight $taskReceiptPath
+    if($LASTEXITCODE -ne 2) {throw "Unexpected receipt guard exit: $scenario"}
+    $taskReceiptObserved=$taskReceiptResult | ConvertFrom-Json
+    if($taskReceiptObserved.gatePassed -ne $false -or $taskReceiptObserved.code -ne $code) {throw "Unexpected receipt guard result: $scenario"}
+    Write-Host "PASS: $scenario"
+}
+Invoke-ReceiptGuard 'CONFIG_INVALID' 'receipt synthetic acknowledgment required before SQL/SDK'
+$taskReceipt.SyntheticFixtureAcknowledged=$true
+Invoke-ReceiptGuard 'LOCALDB_ONLY' 'receipt remote SQL rejected before SQL/SDK'
+$taskReceipt['UnexpectedField']='reject'
+Invoke-ReceiptGuard $null 'receipt unknown fields rejected before SQL/SDK'
+Write-Host '13 offline preflight checks passed. No protected-source/live gate tested.'
 $global:LASTEXITCODE = 0

@@ -1,0 +1,29 @@
+{
+  "date":"2026-10-26",
+  "checkpoint":"Read-only quarantine ownership diagnostic",
+  "tests":{"unit":109,"sql":49,"http":45,"total":203,"skipped":0},
+  "additionalOfflineCliChecks":13,
+  "sqlInspectorTests":"SIMULATED_OBSERVATIONS_WITH_REAL_LOCALDB_AND_FILES",
+  "live":{
+    "mode":"SDK_READBACK_DIAGNOSTIC",
+    "versionId":"fe489695-899b-4e0d-9245-e809b9b7945a",
+    "documentId":"2704b5f0-be76-404d-9c9a-e1c79a05245b",
+    "uploaderOid":"42c1e930-b22f-4a82-b7e0-daa5dd9eebdb",
+    "bytes":45568,
+    "encryptedSha256":"24B7904375817C5AA033F6713D23ABE01BB52A79FD589138A0BE60463DA46235",
+    "outcome":"RMS_OWNER_MISMATCH",
+    "originalOwnerDelegation":true,"delegatedToUploader":false,
+    "graphBMappingReadback":true,"databaseWrites":false,
+    "postProbeSqlState":"AwaitingValidation",
+    "documentRevision":3,"aclRevision":1,"originalAuditEvents":3,"exportJobs":0
+  },
+  "runtime":{"fileSdk":"1.18.124","msal":"4.84.2"},
+  "scannerHostStatus":{
+    "antivirusEnabled":true,"realTimeProtectionEnabled":true,"mode":"Normal",
+    "product":"4.18.26090.9","engine":"1.1.26090.9","signature":"1.461.206.0",
+    "signatureAtUtc":"2026-10-25T20:04:08Z","fileScan":"NOT_RUN"
+  },
+  "contentExtraction":"NOT_RUN","structuralValidation":"NOT_RUN",
+  "canPublish":false,"canDownload":false,"tenantMutations":false,"azureDeployment":false,
+  "gates":{"G1":"PARTIAL","G2":"DEFERRED_NOT_PASSED","G6":"NOT_PASSED"}
+}

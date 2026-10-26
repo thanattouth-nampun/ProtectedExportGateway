@@ -19,6 +19,9 @@ public sealed class PortalIdentityDirectory
     }
     public ReviewedPortalIdentity[] Options => entries.Values.OrderBy(x=>x.DisplayName,StringComparer.Ordinal).ToArray();
     public bool Contains(PrincipalId principal)=>principal.TenantId==TenantId && entries.ContainsKey(principal.ObjectId);
+    // Server-reviewed mapping only; never resolve an RMS address from browser claims or an upload field.
+    public ReviewedPortalIdentity? Resolve(PrincipalId principal)=>principal.TenantId==TenantId
+        && entries.TryGetValue(principal.ObjectId,out var entry) ? entry : null;
 }
 public sealed record OwnerActor(PrincipalId Principal,bool IsWorkspaceMember);
 public sealed record DraftEdit(string Title,string Purpose,Guid[] RequesterObjectIds);

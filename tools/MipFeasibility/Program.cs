@@ -18,6 +18,8 @@ if (args is ["run", var configPath]) return await LiveSpike.Run(configPath);
 if (args is ["owner-only-preflight", var preflightPath]) return await OwnerOnlySpike.Run(preflightPath,false);
 if (args is ["owner-only-run", var protectedPath]) return await OwnerOnlySpike.Run(protectedPath,true);
 if (args is ["compare-protection", var authConfig, var manifest]) return await ProtectionComparison.Run(authConfig,manifest);
+if (args is ["quarantine-owner-preflight", var receiptConfig]) return await QuarantineOwnerProbe.Run(receiptConfig,null);
+if (args is ["quarantine-owner-inspect", var liveReceiptConfig, var receiptAuth]) return await QuarantineOwnerProbe.Run(liveReceiptConfig,receiptAuth);
 if (args is ["native-check"])
 {
     try
@@ -32,6 +34,6 @@ if (args is ["native-check"])
         return 2;
     }
 }
-Console.WriteLine("MipFeasibility: api | native-check | run <private-config.json> | owner-only-preflight <private-config.json> | owner-only-run <private-config.json> | compare-protection <private-config.json> <hash-pinned-manifest.json>");
+Console.WriteLine("MipFeasibility: api | native-check | run <private-config.json> | owner-only-preflight <private-config.json> | owner-only-run <private-config.json> | compare-protection <private-config.json> <hash-pinned-manifest.json> | quarantine-owner-preflight <private-receipt-config.json> | quarantine-owner-inspect <private-receipt-config.json> <private-owner-auth.json>");
 return args.Length == 0 ? 0 : 2;
 

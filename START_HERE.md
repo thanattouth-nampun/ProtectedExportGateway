@@ -1,5 +1,9 @@
 # Start here — Protected Export Gateway v4.3
 
+26 October checkpoint: [Read-only quarantine ownership probe](docs/quarantine-ownership-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-quarantine-ownership.md). 203 tests passed; live SDK rejected the existing B-uploaded envelope with RMS_OWNER_MISMATCH. SQL/web remains AwaitingValidation, no Publish/download. Positive owner intake and T24/T25/G6 content inspection/scanner/promotion remain pending. No tenant/Azure changes.
+
+21 October checkpoint: [Development-only local quarantine receipt](docs/quarantine-upload-checkpoint.md) and [actual evidence](docs/evidence/2026-10-21-quarantine-upload.md). Raw synthetic envelope receipt/hash/status works; source ownership/scanner/protected validation/Azure Blob binding and production upload eligibility remain unproven. Next T24/T25/G6; no Publish/download release.
+
 Latest access decision: [ADR-014 self-service Member workspaces](docs/member-self-service-workspace.md). All verified internal tenant Members get own private drafts without Publisher enrollment. This does not relax RMS-owner/scan/release gates. The human approved the exact Entra member-claim/enrollment changes and the new local artifact is active; fresh Member login/acceptance is tracked separately from the 183-test local checkpoint.
 
 Latest scope: [ADR-013 standalone owner-only source](docs/standalone-owner-only-mvp.md). Defer SharePoint/OneDrive/content connectors; retain Entra/MIP/Azure and both report/library modules. The owner controls a portal requester ACL independently from source RMS rights. New copies must retain the original RMS owner, plus exactly the verified requester as ordinary editor-profile recipient. Login alone never authorizes download.

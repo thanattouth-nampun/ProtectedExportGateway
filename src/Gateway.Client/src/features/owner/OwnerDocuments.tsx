@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ApiError, mutate, request } from '../../app/api';
+import { QuarantineUploads } from './QuarantineUploads';
 import type { components } from '../../contracts/api';
 
 type Document = components['schemas']['OwnerDocumentView'];
@@ -14,7 +15,7 @@ const schema = z.object({ title: z.string().trim().min(1, 'Enter a title.').max(
   purpose: z.string().trim().min(1, 'Describe the document purpose.').max(1000), requesterObjectIds: z.array(z.string()).max(50, 'Choose up to 50 identities.') });
 type Form = z.infer<typeof schema>;
 
-export function OwnerDocuments({ allowed }: { allowed: boolean }) {
+export function OwnerDocuments({ allowed, uploadAllowed = false }: { allowed: boolean; uploadAllowed?: boolean }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [skip, setSkip] = useState(0);
   const [savedNotice, setSavedNotice] = useState('');
@@ -26,7 +27,7 @@ export function OwnerDocuments({ allowed }: { allowed: boolean }) {
   return <section aria-labelledby="owner-heading"><div className="page-heading"><div><p className="eyebrow">OWNER WORKSPACE</p>
     <h1 id="owner-heading">My documents</h1><p>Prepare private drafts and choose who may request a protected copy.</p></div>
     <button className="primary" onClick={() => { setSelected(null); setSavedNotice(''); }}>New draft</button></div>
-    <div className="info-note">Drafts are private. Upload, publishing and downloads are not available yet. Saving an access list does not grant access to the source file.</div>
+    <div className="info-note">Drafts are private. {uploadAllowed ? 'Local quarantine intake is a synthetic-only inspection spike.' : 'Upload is not configured.'} Publishing and downloads are not available yet. Saving an access list does not grant access to the source file.</div>
     {savedNotice && <p role="status">{savedNotice}</p>}
     {query.isPending || options.isPending ? <p role="status">Loading your workspace…</p> : query.isError || options.isError ?
       <div><p role="alert">Your document workspace is unavailable. Retry to load the latest saved state.</p><button onClick={() => { void query.refetch(); void options.refetch(); }}>Retry</button></div> :
@@ -36,10 +37,10 @@ export function OwnerDocuments({ allowed }: { allowed: boolean }) {
           aria-pressed={selected === doc.id} onClick={() => { setSelected(doc.id); setSavedNotice(''); }}><span className="document-name"><strong>{doc.title}</strong><small>{doc.status} · Revision {doc.revision}</small></span></button></li>)}</ul>
         <div className="owner-pagination"><button disabled={skip === 0} onClick={() => { setSkip(Math.max(0, skip - 25)); setSelected(null); }}>Previous</button>
           <button disabled={skip + Number(query.data.pageSize) >= Number(query.data.total)} onClick={() => { setSkip(skip + 25); setSelected(null); }}>Next</button></div>
-      </aside><OwnerSelection key={selected ?? 'new'} id={selected} options={options.data} saved={id => { setSelected(id); setSavedNotice('Draft saved.'); }}/></div>}
+      </aside><OwnerSelection key={selected ?? 'new'} id={selected} uploadAllowed={uploadAllowed} options={options.data} saved={id => { setSelected(id); setSavedNotice('Draft saved.'); }}/></div>}
   </section>;
 }
-function OwnerSelection({ id, options, saved }: { id: string | null; options: Option[]; saved: (id: string) => void }) {
+function OwnerSelection({ id, options, saved, uploadAllowed }: { id: string | null; options: Option[]; saved: (id: string) => void; uploadAllowed: boolean }) {
   const doc = useQuery({ queryKey: ['owner-document', id], enabled: id !== null, refetchOnWindowFocus: false,
     queryFn: ({ signal }) => request<Document>(`/api/documents/${id}`, { signal }) });
   const audit = useQuery({ queryKey: ['owner-audit', id], enabled: id !== null,
@@ -47,10 +48,17 @@ function OwnerSelection({ id, options, saved }: { id: string | null; options: Op
   if (id && doc.isPending) return <p role="status">Loading draft…</p>;
   if (id && doc.isError) return <div><p role="alert">This draft could not be loaded.</p><button onClick={() => void doc.refetch()}>Retry draft</button></div>;
   return <div className="owner-editor"><DraftForm key={doc.data?.eTag ?? 'new'} doc={doc.data} options={options} saved={saved} reload={() => void doc.refetch()}/>
+    {id && doc.data && <QuarantineUploads document={doc.data} allowed={uploadAllowed}/>}
     {id && <section aria-label="Draft history"><h2>Recent activity</h2>{audit.isPending ? <p role="status">Loading activity…</p> : audit.isError ? <p role="alert">Activity is unavailable.</p> :
-      <ul>{audit.data.map((event, index) => <li key={index}>{event.eventType === 'DocumentDraftCreated' ? 'Draft created' : event.eventType === 'DocumentDraftAclUpdated' ? 'Access list updated' : 'Draft details updated'}
+      <ul>{audit.data.map((event, index) => <li key={index}>{activityLabel(event.eventType)}
         {' · Revision '}{event.documentRevision}{' · '}{new Date(event.at).toLocaleString('en-GB')}</li>)}</ul>}</section>}
   </div>;
+}
+function activityLabel(event: string) {
+  const labels: Record<string, string> = { DocumentDraftCreated: 'Draft created', DocumentDraftAclUpdated: 'Access list updated',
+    DocumentDraftMetadataUpdated: 'Draft details updated', QuarantineUploadStarted: 'Upload started', QuarantineUploadRetried: 'Upload retried',
+    QuarantineUploadReceived: 'File received in quarantine', QuarantineUploadFailed: 'Upload failed' };
+  return labels[event] ?? 'Document activity';
 }
 function DraftForm({ doc, options, saved, reload }: { doc?: Document; options: Option[]; saved: (id: string) => void; reload: () => void }) {
   const client = useQueryClient();

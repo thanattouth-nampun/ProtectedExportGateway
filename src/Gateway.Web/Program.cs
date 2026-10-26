@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using Gateway.Web;
+using Gateway.Application;
+using Gateway.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -93,7 +95,16 @@ if (configured)
 builder.Services.AddAuthorization(o=>o.AddPolicy("InternalWorkspaceMember",p=>p.RequireAuthenticatedUser()
     .RequireAssertion(c=>MemberWorkspaceAccess.IsAllowed(c.User,tenantGuid))));
 builder.AddOwnerWorkspace(tenantGuid);
+builder.AddLocalQuarantine();
 var app = builder.Build();
+if(Environment.GetEnvironmentVariable("GATEWAY_LOCAL_QUARANTINE_MAINTENANCE")=="1")
+{
+    if(!app.Environment.IsDevelopment()) throw new InvalidOperationException("Local maintenance is Development-only.");
+    using var scope=app.Services.CreateScope();var intake=scope.ServiceProvider.GetRequiredService<SqlQuarantineIntake>();
+    using var timeout=new CancellationTokenSource(TimeSpan.FromMinutes(2));
+    Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new {expiredCandidates=await intake.RecoverExpired(timeout.Token),orphansDeleted=await intake.CleanupOrphans(timeout.Token)}));
+    return;
+}
 app.UseExceptionHandler();
 app.UseStatusCodePages(async status=>
 {
@@ -115,6 +126,14 @@ app.Use(async (context, next) =>
 app.UseAuthentication(); app.UseAuthorization();
 app.Use(async (context,next)=>
 {
+    if(HttpMethods.IsPost(context.Request.Method) && context.Request.Path.StartsWithSegments("/api/documents")
+        && context.Request.Path.Value!.TrimEnd('/').EndsWith("/uploads",StringComparison.OrdinalIgnoreCase))
+    {
+        var feature=context.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpMaxRequestBodySizeFeature>();
+        if(feature is {IsReadOnly:false}) feature.MaxRequestBodySize=QuarantineLimits.MaxBytes+1;
+        var original=context.Request.Body;using var bounded=new MetadataBodyLimitStream(original,QuarantineLimits.MaxBytes+1);
+        context.Request.Body=bounded;try {await next();} finally {context.Request.Body=original;}return;
+    }
     var metadataWrite=(HttpMethods.IsPost(context.Request.Method) && string.Equals(context.Request.Path.Value?.TrimEnd('/'),"/api/documents",StringComparison.OrdinalIgnoreCase))
         || (HttpMethods.IsPatch(context.Request.Method) && context.Request.Path.StartsWithSegments("/api/documents"));
     if (metadataWrite)
@@ -160,7 +179,7 @@ app.MapGet("/auth/login", (string? returnUrl) =>
 });
 app.MapGet("/auth/session", (ClaimsPrincipal user) => new SessionDto(user.FindFirstValue("tid")!, user.FindFirstValue("oid")!,
     user.FindFirstValue("name") ?? "Signed-in user", user.FindAll("roles").Select(c => c.Value).Order().ToArray(), "Simulated",
-    MemberWorkspaceAccess.IsAllowed(user,tenantGuid))).RequireAuthorization();
+    MemberWorkspaceAccess.IsAllowed(user,tenantGuid), app.Environment.IsDevelopment() && app.Services.GetService<IQuarantineObjects>() is not null && MemberWorkspaceAccess.IsAllowed(user,tenantGuid))).RequireAuthorization();
 app.MapGet("/auth/csrf", (HttpContext ctx, IAntiforgery csrf) => new CsrfDto(csrf.GetAndStoreTokens(ctx).RequestToken!)).RequireAuthorization();
 app.MapPost("/auth/logout", () => configured
     ? Results.SignOut(new AuthenticationProperties { RedirectUri = "/sign-in" }, [CookieAuthenticationDefaults.AuthenticationScheme, "Entra"])
@@ -168,6 +187,7 @@ app.MapPost("/auth/logout", () => configured
 // Explicitly unavailable rather than inventing published sources or in-memory durable jobs.
 app.MapGet("/api/documents", () => Results.Problem(statusCode: 503, title: "Published documents are not available yet")).Produces<DocumentPageDto>().RequireAuthorization();
 app.MapOwnerWorkspace();
+app.MapQuarantine();
 app.MapGet("/api/exports/{id}/download", (string id) => Results.Problem(statusCode: 409, title: "Simulated mode has no downloadable artifacts")).RequireAuthorization();
 app.MapMethods("/api/{**path}", ["GET", "HEAD", "POST", "PATCH", "PUT", "DELETE"], () => Results.Problem(statusCode: 404, title: "API route not implemented"));
 app.MapMethods("/auth/{**path}", ["GET", "HEAD", "POST", "PATCH", "PUT", "DELETE"], () => Results.Problem(statusCode: 404, title: "Authentication route not found"));

@@ -1,5 +1,9 @@
 # Protected Export Gateway — v4.3
 
+26 October checkpoint: [read-only quarantine ownership diagnostic](docs/quarantine-ownership-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-quarantine-ownership.md). Live SDK rejected the B-uploaded envelope with RMS_OWNER_MISMATCH; 203 tests passed. No persisted verdict/Publish/download or tenant/Azure changes. Scanner/content-validation/promotion gates remain pending.
+
+21 October local checkpoint: [guarded quarantine receipt](docs/quarantine-upload-checkpoint.md) supports synthetic byte receipt/status in Development only. Owner/scan/validation eligibility and production uploads remain blocked; local storage hashes are not Azure Blob-version evidence. [Actual checks](docs/evidence/2026-10-21-quarantine-upload.md).
+
 20 October access update: [ADR-014 self-service tenant Member workspaces](docs/member-self-service-workspace.md). Every verified internal Member can manage own private drafts without individual Publisher enrollment. Protected intake/ownership/release gates remain; local tests and the subsequently approved Entra/local rollout are separate evidence. Fresh Member-session acceptance is tracked in the linked rollout record.
 
 ขอบเขตล่าสุด: [ADR-013 standalone owner-only source](docs/standalone-owner-only-mvp.md) — พัก SharePoint/OneDrive/content connectors รับโจทย์ต้นฉบับ synthetic XLSX ที่ป้องกันให้เจ้าของเดิม แล้วออกสำเนาเฉพาะผู้รับที่ portal ACL อนุญาต โดยคง RMS owner เดิม Entra/MIP/Azure และ HR Reports ยังอยู่ใน scope การรองรับ protected input ยังเป็น feasibility spike; runtime เดิมไม่เปิดรับหรือดาวน์โหลดแทนหลักฐานจริง ดู [runbook/approval packet](docs/owner-only-spike-runbook.md) ข้อกำหนด unprotected-source/service-owner ด้านล่างเป็น baseline เก่าที่ ADR-013 supersede เฉพาะ Library path
