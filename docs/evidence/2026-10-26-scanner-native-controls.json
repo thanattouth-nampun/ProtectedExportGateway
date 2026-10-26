@@ -1,0 +1,16 @@
+{
+  "date":"2026-10-26",
+  "checkpoint":"Native scanner output/health/error diagnostic controls",
+  "tests":{"unit":145,"skipped":0,"offlineCliChecks":18},
+  "simulation":"Unit health/staleness/parser/timeout decisions; no OS security settings changed",
+  "native":{
+    "binarySha256":"C0C9670D63A8A7DE9C0EF5BA58231826B0ABEE03C2B3BA6F858114D96EA12315",
+    "workerElevated":false,
+    "missingTarget":{"runId":"fbce1072-6960-4272-b873-0204279cd6ce","nativeExitCode":2,"observedHresult":"80070002","text":"NATIVE_NONZERO_RESULT_UNCLASSIFIED","targetExistsAfter":false},
+    "benign":{"runId":"a4dfd113-1a3c-4759-9541-7f11cdd8ef5e","bytes":6339,"beforeHash":"7A53606A5BC0D63ABCA136018389BAF8F46F148A4DF619F53C0553108D9BD606","afterHash":"7A53606A5BC0D63ABCA136018389BAF8F46F148A4DF619F53C0553108D9BD606","nativeExitCode":0,"toolExitCode":3,"text":"NATIVE_NO_THREATS_REPORTED_NOT_TRUSTED","health":"HEALTH_OBSERVED_NOT_GATE_PASS"},
+    "controlledDetection":{"humanApproved":true,"attempts":1,"stage":"approved-vendor-fixture-fetch","errorCategory":"HttpRequestException","errorHresult":"80131500","httpStatus":"NOT_RECORDED","testArchiveWritten":false,"nativeControlScanRan":false,"mirrorOrBypassOrRetry":false,"detectionProven":false}
+  },
+  "cleanVerdict":"NOT_ESTABLISHED","canPublish":false,"canDownload":false,
+  "avPreferenceChanges":false,"helperInstalled":false,"protectedContentExtraction":false,"sqlWrites":false,"tenantChanges":false,"azureDeployment":false,
+  "gates":{"G1":"PARTIAL","G2":"DEFERRED_NOT_PASSED","G6":"NOT_PASSED"}
+}

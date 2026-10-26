@@ -1,5 +1,7 @@
 # Protected Export Gateway — v4.3
 
+Latest T24: [native result/health/error controls](docs/evidence/2026-10-26-scanner-native-controls.md), 145 unit tests +18 offline CLI checks passed. Actual benign and missing-target native results distinguished. Approved detection fixture fetch failed before writing/scanning it; no detection/G6 pass or trusted Clean. No release/security-setting changes.
+
 Latest 26 October increment: [Owner-positive and native scanner callability](docs/scanner-feasibility-checkpoint.md), [evidence](docs/evidence/2026-10-26-owner-positive-scanner.md). Actual Owner upload matched RMS owner; ordinary-user benign Defender scan completed with unchanged hash. These diagnostics do not establish trusted Clean/G6 or permit Publish/download. 124 unit tests +16 offline CLI checks passed this increment.
 
 26 October checkpoint: [read-only quarantine ownership diagnostic](docs/quarantine-ownership-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-quarantine-ownership.md). Live SDK rejected the B-uploaded envelope with RMS_OWNER_MISMATCH; 203 tests passed. No persisted verdict/Publish/download or tenant/Azure changes. Scanner/content-validation/promotion gates remain pending.

@@ -1,5 +1,7 @@
 # Owner-positive and ordinary-user scanner checkpoint — 26 October 2026
 
+Later increment: [native text/health/error controls](evidence/2026-10-26-scanner-native-controls.md) and [explicitly approved controlled-test review](scanner-controlled-test-review.md). Missing-target error and benign parsing/health were observed; the approved vendor control failed during fetch before writing/scanning the test ZIP, so detection remains unproven. Earlier observations below retain their original scope.
+
 This advances ownership diagnostics and the first T24 callability observation. It does not complete G6, create a trusted production scanner, persist an ownership verdict or promote a protected source. ADR-013/014 and the local SQL eligibility prohibition remain.
 
 ## Positive owner upload

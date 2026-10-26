@@ -1,5 +1,7 @@
 # Start here — Protected Export Gateway v4.3
 
+Latest26 October T24 increment: [native output/health/error controls](docs/evidence/2026-10-26-scanner-native-controls.md). 145 unit tests/18 offline CLI checks passed. Real missing-target scan returned2/error; real benign scan matched exact text and bracketed health. Human-approved EICAR attempt failed during vendor fetch, no ZIP written/custom control scan/detection proof, no retry/bypass. T24/G6 still incomplete, no trusted Clean or release. [Exact reviewed scope](docs/scanner-controlled-test-review.md).
+
 26 October next checkpoint: [Owner-positive/scanner callability](docs/scanner-feasibility-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-owner-positive-scanner.md). Original Owner uploaded the synthetic file through real Entra/browser session; fresh SDK returned OWNER_ONLY_OBSERVED_NOT_ELIGIBLE. Ordinary-user Defender benign custom scan reported no threats with unchanged hash, but trusted Clean remains unestablished. 124 unit tests +16 offline CLI checks passed this increment. No content extraction, persisted eligibility or release; G6 still not passed.
 
 26 October checkpoint: [Read-only quarantine ownership probe](docs/quarantine-ownership-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-quarantine-ownership.md). 203 tests passed; live SDK rejected the existing B-uploaded envelope with RMS_OWNER_MISMATCH. SQL/web remains AwaitingValidation, no Publish/download. Positive owner intake and T24/T25/G6 content inspection/scanner/promotion remain pending. No tenant/Azure changes.

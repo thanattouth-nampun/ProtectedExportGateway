@@ -106,5 +106,9 @@ $taskScanner['UnexpectedField']='reject'
 Invoke-ScannerGuard $null 'scanner unknown fields reject before native invocation'
 $taskScanner.Remove('UnexpectedField');$taskScanner.SyntheticScanAcknowledged=$true;$taskScanner.ExecutableSha256='not-a-hash'
 Invoke-ScannerGuard 'CONFIG_INVALID' 'scanner executable hash required before native invocation'
-Write-Host '16 offline preflight checks passed. No protected-source/live gate tested.'
+$taskScanner.ExecutableSha256='A'*64;$taskScanner['Scenario']='VendorEicarZip';$taskScanner['ControlledDetectionAcknowledged']=$false
+Invoke-ScannerGuard 'CONTROLLED_DETECTION_NOT_APPROVED' 'controlled fixture requires separate acknowledgment before network or file creation'
+$taskScanner.ControlledDetectionAcknowledged=$true
+Invoke-ScannerGuard 'CONTROLLED_DETECTION_ROOT_REJECTED' 'controlled fixture cannot use an arbitrary private root'
+Write-Host '18 offline preflight checks passed. No protected-source/live gate tested.'
 $global:LASTEXITCODE = 0

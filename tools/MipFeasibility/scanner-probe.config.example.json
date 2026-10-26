@@ -3,5 +3,7 @@
   "ExecutablePath":"REVIEW_EXACT_SIGNED_DEFENDER_PLATFORM_EXECUTABLE",
   "ExecutableSha256":"REVIEW_AUTHENTICODE_VERIFIED_EXECUTABLE_SHA256",
   "AuthorizationReference":"REVIEW_ORDINARY_USER_BENIGN_SYNTHETIC_SCAN_SCOPE",
-  "SyntheticScanAcknowledged":false
+  "SyntheticScanAcknowledged":false,
+  "Scenario":"BenignWorkbook",
+  "ControlledDetectionAcknowledged":false
 }
