@@ -1,5 +1,7 @@
 # Start here — Protected Export Gateway v4.3
 
+26 October next checkpoint: [Owner-positive/scanner callability](docs/scanner-feasibility-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-owner-positive-scanner.md). Original Owner uploaded the synthetic file through real Entra/browser session; fresh SDK returned OWNER_ONLY_OBSERVED_NOT_ELIGIBLE. Ordinary-user Defender benign custom scan reported no threats with unchanged hash, but trusted Clean remains unestablished. 124 unit tests +16 offline CLI checks passed this increment. No content extraction, persisted eligibility or release; G6 still not passed.
+
 26 October checkpoint: [Read-only quarantine ownership probe](docs/quarantine-ownership-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-quarantine-ownership.md). 203 tests passed; live SDK rejected the existing B-uploaded envelope with RMS_OWNER_MISMATCH. SQL/web remains AwaitingValidation, no Publish/download. Positive owner intake and T24/T25/G6 content inspection/scanner/promotion remain pending. No tenant/Azure changes.
 
 21 October checkpoint: [Development-only local quarantine receipt](docs/quarantine-upload-checkpoint.md) and [actual evidence](docs/evidence/2026-10-21-quarantine-upload.md). Raw synthetic envelope receipt/hash/status works; source ownership/scanner/protected validation/Azure Blob binding and production upload eligibility remain unproven. Next T24/T25/G6; no Publish/download release.

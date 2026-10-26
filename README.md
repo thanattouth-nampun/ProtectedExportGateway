@@ -1,5 +1,7 @@
 # Protected Export Gateway — v4.3
 
+Latest 26 October increment: [Owner-positive and native scanner callability](docs/scanner-feasibility-checkpoint.md), [evidence](docs/evidence/2026-10-26-owner-positive-scanner.md). Actual Owner upload matched RMS owner; ordinary-user benign Defender scan completed with unchanged hash. These diagnostics do not establish trusted Clean/G6 or permit Publish/download. 124 unit tests +16 offline CLI checks passed this increment.
+
 26 October checkpoint: [read-only quarantine ownership diagnostic](docs/quarantine-ownership-checkpoint.md), [actual evidence](docs/evidence/2026-10-26-quarantine-ownership.md). Live SDK rejected the B-uploaded envelope with RMS_OWNER_MISMATCH; 203 tests passed. No persisted verdict/Publish/download or tenant/Azure changes. Scanner/content-validation/promotion gates remain pending.
 
 21 October local checkpoint: [guarded quarantine receipt](docs/quarantine-upload-checkpoint.md) supports synthetic byte receipt/status in Development only. Owner/scan/validation eligibility and production uploads remain blocked; local storage hashes are not Azure Blob-version evidence. [Actual checks](docs/evidence/2026-10-21-quarantine-upload.md).

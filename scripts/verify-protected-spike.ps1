@@ -90,5 +90,21 @@ $taskReceipt.SyntheticFixtureAcknowledged=$true
 Invoke-ReceiptGuard 'LOCALDB_ONLY' 'receipt remote SQL rejected before SQL/SDK'
 $taskReceipt['UnexpectedField']='reject'
 Invoke-ReceiptGuard $null 'receipt unknown fields rejected before SQL/SDK'
-Write-Host '13 offline preflight checks passed. No protected-source/live gate tested.'
+$taskScannerPath=Join-Path $taskRoot 'scanner.local.json'
+$taskScanner=[ordered]@{PrivateRoot=$taskRun;ExecutablePath='NOT-AN-EXECUTABLE';ExecutableSha256=('A'*64)
+    AuthorizationReference='OFFLINE-TEST-ONLY';SyntheticScanAcknowledged=$false}
+function Invoke-ScannerGuard($code,[string]$scenario) {
+    $taskScanner | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $taskScannerPath
+    $taskScannerResult=& dotnet $taskDll defender-scanner-probe $taskScannerPath
+    if($LASTEXITCODE -ne 2) {throw "Unexpected scanner guard exit: $scenario"}
+    $taskScannerObserved=$taskScannerResult | ConvertFrom-Json
+    if($taskScannerObserved.gatePassed -ne $false -or $taskScannerObserved.code -ne $code) {throw "Unexpected scanner guard result: $scenario"}
+    Write-Host "PASS: $scenario"
+}
+Invoke-ScannerGuard 'CONFIG_INVALID' 'scanner acknowledgment required before native invocation'
+$taskScanner['UnexpectedField']='reject'
+Invoke-ScannerGuard $null 'scanner unknown fields reject before native invocation'
+$taskScanner.Remove('UnexpectedField');$taskScanner.SyntheticScanAcknowledged=$true;$taskScanner.ExecutableSha256='not-a-hash'
+Invoke-ScannerGuard 'CONFIG_INVALID' 'scanner executable hash required before native invocation'
+Write-Host '16 offline preflight checks passed. No protected-source/live gate tested.'
 $global:LASTEXITCODE = 0

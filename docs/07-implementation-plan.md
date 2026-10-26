@@ -1,5 +1,7 @@
 # 07 — Implementation backlog and delivery gates v4.2
 
+26 October Owner-positive/T24 increment: original Owner's actual browser upload matched fresh SDK ownership readback; ordinary-user fixed benign Defender scan reported no threats with unchanged bytes. 124 unit tests/16 offline CLI checks passed; no trusted Clean or G6 acceptance. See [runbook](scanner-feasibility-checkpoint.md) and [evidence](evidence/2026-10-26-owner-positive-scanner.md). Next controlled native result/failure validation, trusted scanner adapter and supervised protected-content pipeline; no automatic eligibility or publication.
+
 26 October ownership checkpoint: read-only operator probe binds existing SQL receipt/hash/uploader to reviewed RMS mapping and fresh SDK readback. Actual B receipt returned RMS_OWNER_MISMATCH; no SQL eligibility/UI state change. 203 automated tests passed. See [runbook](quarantine-ownership-checkpoint.md) and [evidence](evidence/2026-10-26-quarantine-ownership.md). Positive owner upload, durable ownership evidence, T24 trusted scanner/helper, T25 protected inspection/promotion and final G6 remain incomplete.
 
 > 20 October ADR-014: [Member self-service workspace](member-self-service-workspace.md) supersedes Publisher-only/pre-enrolled-owner access for private empty drafts. Every tenant Member has an own workspace; source ownership/recipient review/G1/G2/G6/release and report/auditor controls remain. The human subsequently approved the two exact tenant changes; rollout and live acceptance are tracked separately in ADR-014.

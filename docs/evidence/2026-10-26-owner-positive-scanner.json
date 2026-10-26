@@ -1,0 +1,32 @@
+{
+  "date":"2026-10-26",
+  "checkpoint":"Owner-positive SDK readback and ordinary-user benign scanner callability",
+  "tests":{"unit":124,"skipped":0,"offlineCliChecks":16},
+  "ownerUpload":{
+    "documentId":"74d924f8-9c5c-4b15-b354-cf6a6f1684a7",
+    "versionId":"53f6d76e-d10a-44bc-8526-fd55ce9d6b47",
+    "uploaderOid":"33f03fd3-d0d1-44c7-a664-9acbe8171560",
+    "bytes":45568,
+    "encryptedSha256":"24B7904375817C5AA033F6713D23ABE01BB52A79FD589138A0BE60463DA46235",
+    "sdkOutcome":"OWNER_ONLY_OBSERVED_NOT_ELIGIBLE",
+    "persistedState":"AwaitingValidation",
+    "documentRevision":3,"aclRevision":1,"publishedPointer":null
+  },
+  "scannerProbe":{
+    "runId":"692ff9f8-c9ea-4e7b-9dc8-08a311cae6de",
+    "fixture":"Generated synthetic headcount XLSX, not protected-source inspection content",
+    "bytes":6339,
+    "beforeHash":"B2EFE30870C5C2587310C78BBF687AC7021B3E6EEEF392A44E36E13F6C3129E2",
+    "afterHash":"B2EFE30870C5C2587310C78BBF687AC7021B3E6EEEF392A44E36E13F6C3129E2",
+    "executableSha256":"C0C9670D63A8A7DE9C0EF5BA58231826B0ABEE03C2B3BA6F858114D96EA12315",
+    "authenticode":"Valid Microsoft Windows Publisher",
+    "nativeExitCode":0,"toolExitCode":3,"timedOut":false,"outputTruncated":false,
+    "outcome":"INVOCATION_COMPLETED_UNVERIFIED","nativeNoThreatsTextObserved":true,
+    "workerElevated":false,"cleanVerdict":"NOT_ESTABLISHED"
+  },
+  "defenderHealth":{"engine":"1.1.26090.9","intelligence":"1.461.209.0","intelligenceAtUtc":"2026-10-26T00:32:51Z","antivirusEnabled":true,"realTimeEnabled":true},
+  "eicarTest":"NOT_RUN","protectedContentExtraction":"NOT_RUN","structuralValidation":"NOT_RUN",
+  "helperInstalled":false,"tenantChanges":false,"azureDeployment":false,
+  "canPublish":false,"canDownload":false,"exportJobs":0,
+  "gates":{"G1":"PARTIAL","G2":"DEFERRED_NOT_PASSED","G6":"NOT_PASSED"}
+}
